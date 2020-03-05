@@ -435,7 +435,6 @@
     $('#commentpost-btn').click(function () {
         var boo = $('.ui.form').form('validate form');
         if (boo) {
-            console.log('校验成功');
             postComment();
         } else {
             console.log('校验失败');

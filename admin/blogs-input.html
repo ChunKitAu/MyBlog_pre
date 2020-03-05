@@ -11,6 +11,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="../static/js/admin/checkLogin.js"></script>
     <script src="../static/lib/editormd/editormd.min.js"></script>
 </head>
 <body>
@@ -64,7 +65,7 @@
 
                 <div class="field">
                     <div  id="md-content" style="z-index: 1 !important;">
-                        <textarea  id="md-content_value" placeholder="博客内容" style="display: none"></textarea>
+                        <textarea  id="md_content_value" placeholder="博客内容" style="display: none"></textarea>
                     </div>
                 </div>
 
@@ -129,8 +130,8 @@
 
                 <div class="ui right aligned container">
                     <a type="button" class="ui button" onclick="window.history.go(-1)">返回</a>
-                    <a id="save-btn" class="ui secondary button" onclick="postBlog(0)">保存</a>
-                    <a id="publish-btn" class="ui teal button" onclick="postBlog(1)">发布</a>
+                    <a id="save-btn" class="ui secondary button" >保存</a>
+                    <a id="publish-btn" class="ui teal button" >发布</a>
                 </div>
             </form>
         </div>
@@ -149,7 +150,7 @@
     <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
     <script  src="../static/lib/prism/prism.js"> </script>
     <script src="../static/js/commonJS.js"></script>
-    <script src="../static/js/admin/checkLogin.js"></script>
+
 
     <script src="../static/lib/editormd/plugins/image-handle-paste/image-handle-paste.js"></script>
     <script>
@@ -206,9 +207,27 @@
 
             InitTypeMenu(null);
             InitTagMenu(null);
-            console.log(2);
         }
 
+
+        $('#save-btn').click(function () {
+            var boo = $('.ui.form').form('validate form');
+            if (boo) {
+                postBlog(0)
+            } else {
+                console.log('校验失败');
+            }
+
+        });
+        $('#publish-btn').click(function () {
+            var boo = $('.ui.form').form('validate form');
+            if (boo) {
+                postBlog(1)
+            } else {
+                console.log('校验失败');
+            }
+
+        });
 
     });
 
@@ -226,15 +245,12 @@
             }),
             // <div class="item" data-value="1">错误日志</div>
             success: function (result) {
-                console.log(tags);
-                console.log(result.data);
                 // <div class="default text">标签</div>
                 $.each(result.data,function (index,item) {
 
                     var div = document.createElement("div");
 
                     if(tags != null && tags.indexOf(item.id) != -1){
-                        console.log(item.id)
                         div.setAttribute("class","item active filtered");
                         document.getElementById("tagValue").setAttribute("value",tags);
                         var a = document.createElement("a");
@@ -351,6 +367,9 @@
             success:function (result) {
                 alert("成功");
                 window.location.href = "blogs.html";
+            },
+            error:function (error) {
+                alert(error.responseText[2]);
             }
         });
     }
@@ -385,9 +404,9 @@
                 var typeText = document.createElement("div");
                 typeText.setAttribute("class","text");
 
-                $("#md-content_value").empty();
+                $("#md_content_value").empty();
 
-                document.getElementById("md-content_value").append(info.content);
+                document.getElementById("md_content_value").append(info.content);
                 // contentEditor.setMarkdown(info.content);
 
                 $("#indexPicture").val(info.picture);
@@ -407,15 +426,6 @@
         on : 'hover'
     });
 
-    // $('#save-btn').click(function () {
-    //     console.log($("#blog-form").getHTML());
-    // });
-    //
-    //
-    // $('#publish-btn').click(function () {
-    //     // $('#blog-form').submit();
-    // });
-
 
     $('.ui.form').form({
         fields : {
@@ -423,7 +433,35 @@
                 identifier: 'title',
                 rules: [{
                     type : 'empty',
-                    prompt: '标题：请输入博客标题'
+                    prompt: '请输入博客标题'
+                }]
+            },
+            md_content_value : {
+                identifier: 'md_content_value',
+                rules: [{
+                    type : 'empty',
+                    prompt: '请输入博客内容'
+                }]
+            },
+            typeValue : {
+                identifier: 'typeValue',
+                rules: [{
+                    type : 'empty',
+                    prompt: '请选择类型'
+                }]
+            },
+            tagValue : {
+                identifier: 'tagValue',
+                rules: [{
+                    type : 'empty',
+                    prompt: '请选择标签'
+                }]
+            },
+            indexPicture : {
+                identifier: 'indexPicture',
+                rules: [{
+                    type : 'empty',
+                    prompt: '请输入首图'
                 }]
             }
         }

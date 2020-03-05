@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>标签管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/myStyle.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+</head>
+<body>
+
+  <!--导航-->
+  <nav id="header">
+    <script>
+      $("#header").load("admin_template.html #header",function () {
+        var loginUser = sessionStorage.getItem("user");
+        user = loginUser.split(",");
+        $("#avatar").src = user[1];
+        document.getElementById("pubilc_userName").append(user[2]);
+
+        $('.menu.toggle').click(function () {
+          $('.m-item').toggleClass('m-mobile-hide');
+        });
+        $('.ui.dropdown').dropdown({
+          on : 'hover'
+        });
+      });
+    </script>
+  </nav>
+
+
+  <!--中间内容-->
+  <div  class="m-container-small m-padded-tb-big">
+
+    <div class="ui container">
+
+      <div id="messageDiv" class="ui success message" style="display: none">
+        <div class="header">提示：</div>
+        <p id="message"></p>
+      </div>
+
+
+      <div id="opstDiv" class="field" style="display: none">
+        <div class="ui right labeled input">
+          <input id="input" type="text" placeholder="标签名称">
+          <a class="ui teal tag label" onclick="postTag()">添加标签</a>
+        </div>
+      </div>
+
+
+      <!--header-->
+      <div class="ui top attached segment">
+        <div class="ui middle aligned two column grid">
+          <div class="column">
+            <h3 class="ui teal header">标签</h3>
+          </div>
+          <div class="right aligned column">
+            <a id="addBtn" href="#" class="ui mini right floated teal basic button" onclick="openPostDiv()">新增</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="tags" class="ui attached segment m-padded-tb-large">
+        <!--标签-->
+
+      </div>
+
+
+
+    </div>
+  </div>
+  <br><br><br><br><br><br><br><br><br><br>
+
+  <!--底部footer-->
+  <footer id="footer">
+    <script>
+      $("#footer").load("admin_template.html #footer");
+    </script>
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <script src="../static/js/commonJS.js"></script>
+  <script src="../static/js/admin/checkLogin.js"></script>
+
+
+  <script>
+    var exitTag ;
+    $(function () {
+      InitTagHeader();
+    })
+
+
+    function InitTagHeader() {
+      $.ajax({
+        url:myhost+"/blog/tag/list",
+        type: "GET",
+        crossDomain: true,
+        contentType : "application/json",
+        dataType:"json",
+        async:false,
+        data:JSON.stringify({
+          "size":50,
+          "page":1,
+        }),
+        success: function (result) {
+          $('#tags').empty();
+          var contents = result.data;
+          exitTag = new Array();
+
+          $.each(contents,function (index,item) {
+            var a = document.createElement("a");
+              // a.setAttribute("onclick","toTagHref("+item.id+")");
+              exitTag[index] = item.name;
+              a.append(item.name);
+              var div = document.createElement("div");
+              a.setAttribute("class","ui teal basic left pointing large label m-margin-tb-thiny");
+              div.setAttribute("class","detail");
+              div.append(item.num);
+
+              var i = document.createElement("i");
+              i.setAttribute("class","red close icon");
+              i.setAttribute("onclick","deleteTag("+item.id+")");
+
+              a.appendChild(div);
+              a.appendChild(i);
+              $('#tags').append(a);
+          })
+        },
+        error: function (result) {
+        }
+      })
+    }
+
+
+    function openPostDiv() {
+      $("#opstDiv").show();
+      $("#addBtn").attr("style","display : none");
+
+    }
+
+    function postTag(){
+      var name = $("#input").val();
+      if (name.length  == 0){
+        $("#message").empty();
+        $("#message").append("标签名不能为空");
+        $("#messageDiv").show();
+        return ;
+      }
+      if(exitTag.indexOf(name) != -1){
+        $("#message").empty();
+        $("#message").append(name+"已经存在");
+        $("#messageDiv").show();
+        return ;
+      }
+
+      $.ajax({
+        url: myhost + "/blog/tag",
+        type: "POST",
+        crossDomain: true,
+        contentType: "application/json",
+        dataType: "json",
+        headers : {'Authorization':token},
+        data: JSON.stringify({
+          "name":name,
+        }),
+        success: function (result) {
+          alert("添加成功");
+          window.location.reload();
+        }
+      })
+    }
+
+    function deleteTag(deleteId) {
+      if(confirm("是否删除")){
+        $.ajax({
+          url: myhost + "/blog/tag/"+deleteId,
+          type: "DELETE",
+          headers : {'Authorization':token},
+          crossDomain: true,
+          contentType: "application/json",
+          dataType: "json",
+          success: function (result) {
+            alert("删除成功");
+            window.location.reload();
+          }
+        })
+      }
+    }
+
+
+  </script>
+
+  <script>
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+    //消息提示关闭初始化
+    $('.message .close')
+      .on('click', function () {
+        $(this)
+          .closest('.message')
+          .transition('fade');
+      });
+  </script>
+</body>
+</html>

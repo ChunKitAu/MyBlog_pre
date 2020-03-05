@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>首页</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="static/css/myStyle.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+
+</head>
+<body>
+    <!--导航-->
+    <nav id="header">
+        <script>
+            $("#header").load("template.html #header",function () {
+                $("#indexA").attr("class","m-item item m-mobile-hide active");
+                $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
+
+                $('.menu.toggle').click(function () {
+                    $('.m-item').toggleClass('m-mobile-hide');
+                });
+                $('.ui.dropdown').dropdown({
+                    on : 'hover'
+                });
+            });
+        </script>
+    </nav>
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-big">
+        <div class="ui container">
+            <div class="ui stackable grid">
+
+                <!---->
+                <div class="five wide column">
+                    <!--分类-->
+                    <div class="ui segments">
+                        <div class="ui secondary segment">
+                            <div class="ui two column grid">
+                                <div class="column">
+                                    <i class="idea icon"></i>分类
+                                </div>
+                                <div class="right aligned column">
+                                    <a href="type.html">more <i class="angle double right icon"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui teal segment">
+                            <div class="ui fluid vertical menu" id="type">
+
+                                <!--分类表-->
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--标签-->
+                    <div class="ui segments m-margin-top-large">
+                        <div class="ui secondary segment">
+                            <div class="ui two column grid">
+                                <div class="column">
+                                    <i class="tags icon"></i>标签
+                                </div>
+                                <div class="right aligned column">
+                                    <a href="tags.html">more <i class="angle double right icon"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui teal  segment" id="tagContent">
+
+                        </div>
+                    </div>
+                    <!--最新推荐-->
+                    <div class="ui segments m-margin-top-large" id="commendContent">
+
+                    </div>
+
+                    <!--二维码-->
+                    <h4 class="ui horizontal divider header">扫描关注我</h4>
+                    <div class="ui card centered m-margin-top-large" style="width: 11em">
+                        <img src="static/images/wechat.jpg" alt="" class="ui rounded image" >
+                    </div>
+                </div>
+
+
+
+                <!--博客列表-->
+                <div class="eleven wide column">
+                    <!--header-->
+                    <div class="ui top attached segment">
+                        <div class="ui middle aligned two column grid">
+                            <div class="column">
+                                <h3 class="ui teal header">博客</h3>
+                            </div>
+                            <div class="right aligned column">
+<!--                                共 <h3 class="ui orange header m-inline-block m-text-thin">14</h3> 篇-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--content-->
+                    <div id="blogContent" class="ui attached   segment">
+
+                    </div>
+                    <!--bottom-->
+                    <div id="bottmText" class="ui bottom attached  segment" style="display: none">
+                        <div class="ui middle aligned two column grid">
+                            <div class="column">
+                            </div>
+                            <div class="right aligned column">
+                                <a class="ui mini orange header ">没有啦....</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--底部footer-->
+    <footer id="footer">
+        <script>
+            $("#footer").load("template.html #footer");
+        </script>
+    </footer>
+
+
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="static/js/commonJS.js"></script>
+<script src="static/js/pre/toHref.js"></script>
+<script src="static/js/pre/initBlog.js"></script>
+<script>
+
+    $(function () {
+        initBlog(pageno);
+        InitTypeList();
+        InitTagsList();
+        InitRecommend();
+        $(window).scroll(function() {
+            var scrollTop = $(this).scrollTop(),scrollHeight = $(document).height(),windowHeight = $(this).height();
+            var positionValue = (scrollTop + windowHeight) - scrollHeight;
+            if (positionValue >= -C) {
+                if (pageno <=  totalPages ) {
+                    pageno++;
+                    initBlog(pageno);
+                } else {
+                   $("#bottmText").show();
+                }
+            }
+        });
+    });
+    //初始化右边分类信息
+    function InitTypeList() {
+        $.ajax({
+        url:myhost+"/blog/type/list",
+        dataType:"JSON",
+        type: "GET",
+        contentType : "application/json;charset-UTF-8",
+        crossDomain: true,
+        data:JSON.stringify({
+            "page":1,
+            "size":10
+        }),
+        success: function (result) {
+            if(result.status == 200){
+                var contents = result.data;
+                $("#type").empty();
+
+                $.each(contents,function (index,item) {
+                    if(item.num != 0){
+                        var a = document.createElement('a');
+                        a.innerText = item.name;
+                        a.setAttribute("onclick","toTypeHref("+item.id+")");
+                        a.href = "#";
+                        a.setAttribute("class","item");
+
+                        var div = document.createElement('div');
+                        div.append(item.num);
+                        div.setAttribute("class","ui teal basic left pointing label")
+
+                        a.appendChild(div);
+                        $("#type").append(a);
+                    }
+
+                })
+            }
+        },
+        error: function () {
+
+        }
+    })
+    }
+
+    function InitTagsList() {
+        $.ajax({
+            url:myhost+"/blog/tag/list",
+            dataType:"JSON",
+            type: "GET",
+            contentType : "application/json;charset-UTF-8",
+            crossDomain: true,
+            data:JSON.stringify({
+                "page":1,
+                "size":10
+            }),
+
+            // <a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-thiny">
+            // 学习方法
+            // <div class="detail">12</div>
+            // </a>
+            success: function (result) {
+                if(result.status == 200){
+                    var contents = result.data;
+                    $("#tagContent").empty();
+
+                    $.each(contents,function (index,item) {
+                        if(item.num != 0){
+                            var a = document.createElement('a');
+                            a.innerText = item.name;
+                            a.setAttribute("onclick","toTagHref("+item.id+")");
+                            a.href = "#";
+                            a.setAttribute("class","ui teal basic left pointing m-margin-top-small label ");
+
+                            var div = document.createElement('div');
+                            div.append(item.num);
+                            div.setAttribute("class","detail")
+
+                            a.appendChild(div);
+                            $("#tagContent").append(a);
+                        }
+
+
+                    })
+                }
+            },
+            error: function () {
+
+            }
+        })
+    }
+
+    function InitRecommend() {
+        $.ajax({
+            url:myhost+"/blog/article/recommend/list",
+            dataType:"JSON",
+            type: "GET",
+            contentType : "application/json;charset-UTF-8",
+            crossDomain: true,
+            success: function (result) {
+                if(result.status == 200){
+                    var contents = result.data;
+                    $("#commendContent").empty();
+                        // <div class="ui secondary segment">
+                        // <i class="bookmark icon"></i>最新推荐
+                        // </div>
+                    var d = document.createElement('div');
+                    d.setAttribute("class","ui secondary segment");
+                    var i =document.createElement('i');
+                    i.setAttribute("class","bookmark icon");
+                    d.appendChild(i);
+                    d.append("最新推荐");
+                    $("#commendContent").append(d);
+                    // <div class="ui segment ">
+                    // <a href="#" target="_blank" class="m-black m-text-thin">阿斯顿你</a>
+                    // </div>
+                    $.each(contents,function (index,item) {
+                        var div = document.createElement('div');
+                        div.setAttribute("class","ui segment");
+
+                        var a = document.createElement('a');
+                        a.innerText = item.title;
+                        a.setAttribute("onclick","toBlogHref("+item.id+")");
+                        a.href = "#";
+                        a.setAttribute("class","m-black m-text-thin");
+
+                        div.appendChild(a);
+                        $("#commendContent").append(div);
+
+                    })
+                }
+            },
+            error: function () {
+
+            }
+        })
+    }
+
+    function initBlog(page) {
+        $.ajax({
+            url:myhost+"/blog/article/list",
+            dataType:"JSON",
+            type: "GET",
+            contentType : "application/json;charset-UTF-8",
+            crossDomain: true,
+            data:{
+                "page":page,
+                "size":size,
+            },
+            async:false,
+            success: function (result) {
+                if(result.status == 200){
+                    var contents = result.data;
+                    totalPages = result.data[0].totalPgae;
+                    Blog("blogContent",contents);
+                }
+            },
+            error: function (result) {
+                if(result.responseJSON.status == 500){
+
+                }
+            }
+        })
+    }
+
+
+
+</script>
+
+
+</body>
+</html>

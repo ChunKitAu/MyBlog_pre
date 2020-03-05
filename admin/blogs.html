@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>博客管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/myStyle.css">
+    <link rel="stylesheet" href="../static/lib/prism/prism.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+</head>
+<body>
+    <!--导航-->
+    <nav id="header">
+        <script>
+            $("#header").load("admin_template.html #header",function () {
+                var loginUser = sessionStorage.getItem("user");
+                user = loginUser.split(",");
+                $("#avatar").src = user[1];
+                document.getElementById("pubilc_userName").append(user[2]);
+
+                $('.menu.toggle').click(function () {
+                    $('.m-item').toggleClass('m-mobile-hide');
+                });
+                $('.ui.dropdown').dropdown({
+                    on : 'hover'
+                });
+            });
+        </script>
+    </nav>
+
+    <div class="ui attached pointing menu">
+        <div class="ui container">
+            <div class="right menu">
+                <a href="blogs-input.html" class="item">发布</a>
+                <a href="blogs.html" class="teal item active">列表</a>
+            </div>
+        </div>
+    </div>
+
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+        <div class="ui container">
+            <form action="#" method="post" class="ui segment form">
+                <div class="inline fields">
+                    <div class="field">
+                        <input type="text" name="title" placeholder="标题">
+                    </div>
+                    <div class="field">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="type">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">分类</div>
+                            <div class="menu">
+                                <div class="item" data-value="1">错误日记</div>
+                                <div class="item" data-value="2">开发者手册</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" id="recommend" name="recommend">
+                            <label for="recommend">推荐</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button class="ui teal basic button"><i class="search icon"></i>搜索</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="ui selectable  table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>标题</th>
+                        <th>更新时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table_boby">
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="6">
+                            <div class="ui minizzz pagination menu">
+                                <a class="item">上一页</a>
+                                <a class="item">下一页</a>
+                            </div>
+                            <a href="#" class="ui teal right floated mini basic button">新增</a>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+
+
+    <!--底部footer-->
+    <footer id="footer">
+        <script>
+            $("#footer").load("admin_template.html #footer");
+        </script>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+    <script src="../static/js/commonJS.js"></script>
+    <script src="../static/js/admin/checkLogin.js"></script>
+    <script src="../static/lib/prism/prism.js"></script>
+    <script>
+
+        $(function () {
+            $.ajax({
+                url: myhost + "/blog/article/list",
+                type: "GET",
+                crossDomain: true,
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    "size": 10,
+                    "page": 1,
+                }),
+                success: function (result) {
+                    var table = document.getElementById("table_boby");
+                    $.each(result.data,function (index,item) {
+                        var tr = document.createElement("tr");
+                        var indexTd = document.createElement("td");
+                        indexTd.append(index+1);
+
+                        var titleTd = document.createElement("td");
+                        titleTd.append(item.title);
+
+                        var createTimeTd = document.createElement("td");
+                        createTimeTd.append(item.createTime);
+
+                        var statusTd = document.createElement("td");
+                        if(item.status){
+                            statusTd.append("发布");
+                        }else{
+                            statusTd.append("保存");
+                        }
+
+
+                        var doTd = document.createElement("td");
+                        var editBtn = document.createElement("a");
+                        editBtn.setAttribute("class","ui mini teal basic button");
+                        editBtn.href = "#";
+                        editBtn.innerText = "编辑";
+                        editBtn.setAttribute("onclick","toBlog("+item.id+")")
+                        var delBtn = document.createElement("a");
+                        delBtn.setAttribute("class","ui mini red basic button");
+                        delBtn.href = "#";
+                        delBtn.innerText = "删除";
+                        delBtn.setAttribute("onclick","deleteBlog("+item.id+")")
+                        doTd.append(editBtn);
+                        doTd.append(delBtn);
+
+                        tr.append(indexTd);
+                        tr.append(titleTd);
+                        tr.append(createTimeTd);
+                        tr.append(statusTd);
+                        tr.append(doTd);
+
+
+                        table.append(tr);
+                    })
+                }
+            })
+
+        })
+
+
+        function toBlog(blogId) {
+            sessionStorage.setItem("blogId",blogId);
+            window.location.href = "blogs-input.html"
+        }
+        function deleteBlog(blogId) {
+
+        }
+
+    </script>
+
+<script>
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
+</script>
+</body>
+</html>

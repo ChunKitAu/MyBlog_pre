@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>搜索</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="static/css/myStyle.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+</head>
+<body>
+    <!--导航-->
+    <nav id="header">
+        <script>
+            $("#header").load("template.html #header",function () {
+                $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
+
+                $('.menu.toggle').click(function () {
+                    $('.m-item').toggleClass('m-mobile-hide');
+                });
+                $('.ui.dropdown').dropdown({
+                    on : 'hover'
+                });
+            });
+        </script>
+    </nav>
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+        <div class="ui container">
+            <!--header-->
+            <div class="ui top attached segment">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <h3 class="ui teal header">搜索结果：</h3>
+                    </div>
+                    <div class="right aligned column">
+<!--                        共 <h3 class="ui orange header m-inline-block m-text-thin">14</h3> 篇-->
+                    </div>
+                </div>
+            </div>
+            <div class="ui top attached teal segment" id="tagBlog">
+                <!--文章-->
+            </div>
+            <!--bottom-->
+            <div id="bottmText" class="ui bottom attached  segment" style="display: none">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                    </div>
+                    <div class="right aligned column">
+                        <a class="ui mini orange header ">没有啦....</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--底部footer-->
+    <footer id="footer">
+        <script>
+            $("#footer").load("template.html #footer");
+        </script>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="static/js/commonJS.js"></script>
+    <script src="static/js/pre/initBlog.js"></script>
+    <script src="static/js/pre/toHref.js"></script>
+
+    <script>
+        $(function () {
+            var query = sessionStorage.getItem("blogKeyword");
+            InitBolg(pageno,query);
+            $(window).scroll(function() {
+                var scrollTop = $(this).scrollTop(),scrollHeight = $(document).height(),windowHeight = $(this).height();
+                var positionValue = (scrollTop + windowHeight) - scrollHeight;
+                if (positionValue >= -C) {
+                    if (pageno <=  totalPages ) {
+                        pageno++;
+                        InitBolg(pageno,query);
+                    } else {
+                        $("#bottmText").show();
+                    }
+                }
+            });
+        })
+
+        function InitBolg(pageno,query) {
+            $.ajax({
+                url: myhost + "/blog/article/like",
+                type: "GET",
+                crossDomain: true,
+                contentType: "application/json",
+                dataType: "json",
+                data: {
+                    "keywords":query,
+                    "page": pageno,
+                    "size": size
+                },
+                success: function (result) {
+                    totalPages = result.data[0].totalPgae;
+                    Blog("tagBlog",result.data);
+                }
+            });
+
+        }
+
+
+    </script>
+</body>
+</html>

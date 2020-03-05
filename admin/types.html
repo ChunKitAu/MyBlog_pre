@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>分类管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/myStyle.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+</head>
+<body>
+
+  <!--导航-->
+  <nav id="header">
+    <script>
+      $("#header").load("admin_template.html #header",function () {
+        var loginUser = sessionStorage.getItem("user");
+        user = loginUser.split(",");
+        $("#avatar").src = user[1];
+        document.getElementById("pubilc_userName").append(user[2]);
+
+        $('.menu.toggle').click(function () {
+          $('.m-item').toggleClass('m-mobile-hide');
+        });
+        $('.ui.dropdown').dropdown({
+          on : 'hover'
+        });
+      });
+    </script>
+  </nav>
+
+  <!--中间内容-->
+  <div  class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+
+      <div id="messageDiv" class="ui success message" style="display: none">
+        <div class="header">提示：</div>
+        <p id="message"></p>
+      </div>
+
+      <div id="opstDiv" class="field" style="display: none">
+        <div class="ui left labeled input">
+          <input id="input" type="text" name="name" placeholder="标签名称" >
+          <a class="ui teal tag label" id="postBtn" onclick="postType()">提交</a>
+        </div>
+      </div>
+
+
+      <!--header-->
+      <div class="ui top attached segment">
+        <div class="ui middle aligned two column grid">
+          <div class="column">
+            <h3 class="ui teal header">分类</h3>
+          </div>
+          <div class="right aligned column">
+            <a href="#"   class="ui mini right floated teal basic button" onclick="openPostDiv()">新增</a>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="ui attached segment m-padded-tb-large" id="typeList">
+
+        <!--分类-->
+      </div>
+
+    </div>
+  </div>
+
+  <br><br><br><br><br><br><br><br><br><br>
+  <!--底部footer-->
+  <footer id="footer">
+    <script>
+      $("#header").load("admin_template.html #header",function () {
+        var loginUser = sessionStorage.getItem("user");
+        user = loginUser.split(",");
+        $("#avatar").src = user[1];
+        document.getElementById("pubilc_userName").append(user[2]);
+      });
+    </script>
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <script src="../static/js/commonJS.js"></script>
+  <script src="../static/js/admin/checkLogin.js"></script>
+  <script>
+    var exitType;
+
+    $(function () {
+      InitTypeHeader();
+    })
+
+    function InitTypeHeader() {
+      $.ajax({
+        url: myhost + "/blog/type/list",
+        dataType: "JSON",
+        type: "GET",
+        contentType: "application/json;charset-UTF-8",
+        crossDomain: true,
+        data: JSON.stringify({
+          "page": 1,
+          "size": 50
+        }),
+        async:false,
+        success: function (result) {
+          var types = result.data;
+          $("#typeList").empty();
+          exitType = new Array();
+          $.each(types,function (index,item) {
+
+            exitType[index] = item.name;
+
+            var divtop = document.createElement('div');
+            divtop.setAttribute("class","ui labeled button m-margin-tb-thiny");
+
+            var a = document.createElement('a');
+            // a.setAttribute("onclick","toTypeHref("+item.id+")");
+            a.href="#";
+            a.innerText = item.name;
+            var div = document.createElement('div');
+            div.append(item.num);
+
+            a.setAttribute("class","ui teal basic  button");
+            div.setAttribute("class","ui teal basic left pointing label");
+
+            var i = document.createElement("i");
+            i.setAttribute("class","large red close icon");
+            i.setAttribute("onclick","deleteType("+item.id+")");
+            div.appendChild(i);
+
+            divtop.appendChild(a);
+            divtop.appendChild(div);
+
+
+            $("#typeList").append(divtop);
+
+          });
+        }
+      });
+    }
+
+
+    function openPostDiv() {
+      $("#opstDiv").show();
+      $("#addBtn").attr("style","display : none");
+
+    }
+
+    function postType(){
+      var name = $("#input").val();
+      if (name.length  == 0){
+        $("#message").empty();
+        $("#message").append("标签名不能为空");
+        $("#messageDiv").show();
+        return ;
+      }
+      if(exitType.indexOf(name) != -1){
+        $("#message").empty();
+        $("#message").append(name+"已经存在");
+        $("#messageDiv").show();
+        return ;
+      }
+
+      $.ajax({
+        url: myhost + "/blog/type",
+        type: "POST",
+        crossDomain: true,
+        contentType: "application/json",
+        dataType: "json",
+        headers : {'Authorization':token},
+        data: JSON.stringify({
+          "name":name,
+        }),
+        success: function (result) {
+          alert("添加成功");
+          window.location.reload();
+        }
+      })
+    }
+
+    function deleteType(deleteId) {
+      if(confirm("是否删除")){
+        $.ajax({
+          url: myhost + "/blog/type/"+deleteId,
+          type: "DELETE",
+          crossDomain: true,
+          contentType: "application/json",
+          headers : {'Authorization':token},
+          dataType: "json",
+          success: function (result) {
+            alert("删除成功");
+            window.location.reload();
+          }
+        })
+      }
+    }
+
+
+
+
+  </script>
+
+
+  <script>
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+    //消息提示关闭初始化
+    $('.message .close')
+      .on('click', function () {
+        $(this)
+          .closest('.message')
+          .transition('fade');
+      });
+  </script>
+</body>
+</html>

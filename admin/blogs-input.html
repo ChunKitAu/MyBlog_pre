@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>博客发布</title>
+    <link rel="stylesheet" href="../static/lib/prism/prism.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/lib/editormd/css/editormd.min.css">
+    <link rel="stylesheet" href="../static/css/myStyle.css">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="../static/lib/editormd/editormd.min.js"></script>
+</head>
+<body>
+    <!--导航-->
+    <nav id="header">
+        <script>
+            $("#header").load("admin_template.html #header",function () {
+                var loginUser = sessionStorage.getItem("user");
+                user = loginUser.split(",");
+                $("#avatar").src = user[1];
+                document.getElementById("pubilc_userName").append(user[2]);
+
+                $('.menu.toggle').click(function () {
+                    $('.m-item').toggleClass('m-mobile-hide');
+                });
+                $('.ui.dropdown').dropdown({
+                    on : 'hover'
+                });
+            });
+        </script>
+    </nav>
+
+    <div class="ui attached pointing menu">
+        <div class="ui container">
+            <div class="right menu">
+                <a href="blogs-input.html" class="item">发布</a>
+                <a href="blogs.html" class="teal item active">列表</a>
+            </div>
+        </div>
+    </div>
+
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+        <div class="ui container">
+            <form id="blog-form" action="#" method="post" class="ui form">
+
+                <div class="required field">
+                    <div class="ui left labeled input">
+                        <div class="ui  selection compact teal basic dropdown label">
+                            <input id="copyRightStatus" type="hidden"value ="1" >
+                            <i class="dropdown icon"></i>
+                            <div class="text">原创</div>
+                            <div class="menu" id="copyRight">
+                                <div class="item" data-value="1">原创</div>
+                                <div class="item" data-value="2">转载</div>
+                            </div>
+                        </div>
+                        <input type="text" id="title" placeholder="标题">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div  id="md-content" style="z-index: 1 !important;">
+                        <textarea  id="md-content_value" placeholder="博客内容" style="display: none"></textarea>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <div class="ui left labeled action input">
+                            <label class="ui compact teal basic label">分类</label>
+                            <div id="typeShow" class="ui fluid selection dropdown">
+                                <input type="hidden" id="typeValue"  name="type">
+                                <i class="dropdown icon"></i>
+                                <div class="menu" id="typeMenu">
+
+                                </div>
+                                <div class="text" id="defTypeText"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left labeled action input">
+                            <label class="ui compact teal basic label">标签</label>
+                            <div id="tagshow" class="ui fluid search multiple  selection dropdown">
+                                <input id="tagValue" type="hidden" name="tag">
+                                <i class="dropdown icon"></i>
+
+                                <div class="menu" id="tagMenu">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filed">
+                    <div class="ui left labeled fluid input">
+                        <label  class="ui teal basic label">首图</label>
+                        <input type="text" id="indexPicture" placeholder="首图引用地址">
+                    </div>
+                </div>
+
+                <div class="inline fields">
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" id="recommend" name="recommend" checked class="hidden">
+                            <label for="recommend">推荐</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" id="appreciation" name="appreciation" class="hidden">
+                            <label for="appreciation">赞赏</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" id="comment" name="comment" class="hidden">
+                            <label for="comment">评论</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui error message"></div>
+
+                <div class="ui right aligned container">
+                    <a type="button" class="ui button" onclick="window.history.go(-1)">返回</a>
+                    <a id="save-btn" class="ui secondary button" onclick="postBlog(0)">保存</a>
+                    <a id="publish-btn" class="ui teal button" onclick="postBlog(1)">发布</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!--底部footer-->
+    <footer id="footer">
+        <script>
+            $("#footer").load("admin_template.html #footer");
+        </script>
+    </footer>
+
+
+
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script  src="../static/lib/prism/prism.js"> </script>
+    <script src="../static/js/commonJS.js"></script>
+    <script src="../static/js/admin/checkLogin.js"></script>
+
+    <script src="../static/lib/editormd/plugins/image-handle-paste/image-handle-paste.js"></script>
+    <script>
+    //初始化markdown编译器
+    var contentEditor;
+    var blogId = null;
+    var tagList = null;
+    $(function() {
+
+        blogId =sessionStorage.getItem("blogId");
+        contentEditor = editormd("md-content", {
+            width   : "100%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "../static/lib/editormd/lib/",
+
+            saveHTMLToTextarea : true, // 保存 HTML 到 Textarea
+            searchReplace : true,
+            codeFold : true,
+
+            //上传图片
+            imageUpload: true,
+            imageFormats : [ "jpg", "jpeg", "gif", "png", "bmp", "webp" ],
+            imageUploadURL : myhost +"/blog/file/upload/img",//后端图片上传的服务地址
+            crossDomainUpload : true,
+            uploadCallbackURL : "http://localhost:63343/MyBlog/admin/blogs-input.html",//上传成功后跳转的地址
+
+            onload: function() {
+                // 引入图片复制插件 执行监听方法
+                contentEditor.imagePaste();
+            }
+        });
+
+
+        if(blogId != null){
+
+
+            var tagDef = document.createElement("div");
+            tagDef.setAttribute("class","default text");
+            $("#tagshow").append(tagDef);
+            sessionStorage.removeItem("blogId")
+            sessionStorage.setItem("updatId",blogId);
+            InitBlogContent();
+        }else{
+            var typeDef = document.createElement("div");
+            typeDef.setAttribute("class","default text");
+            typeDef.append("分类");
+            $("#typeShow").append(typeDef);
+
+            var tagDef = document.createElement("div");
+            tagDef.setAttribute("class","default text");
+            tagDef.append("标签");
+            $("#tagshow").append(tagDef);
+
+            InitTypeMenu(null);
+            InitTagMenu(null);
+            console.log(2);
+        }
+
+
+    });
+
+
+    function InitTagMenu(tags){
+        $.ajax({
+            url: myhost + "/blog/tag/list",
+            type: "GET",
+            crossDomain: true,
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                "size": 10,
+                "page": 1,
+            }),
+            // <div class="item" data-value="1">错误日志</div>
+            success: function (result) {
+                console.log(tags);
+                console.log(result.data);
+                // <div class="default text">标签</div>
+                $.each(result.data,function (index,item) {
+
+                    var div = document.createElement("div");
+
+                    if(tags != null && tags.indexOf(item.id) != -1){
+                        console.log(item.id)
+                        div.setAttribute("class","item active filtered");
+                        document.getElementById("tagValue").setAttribute("value",tags);
+                        var a = document.createElement("a");
+                        a.setAttribute("class","ui label transition visible");
+                        a.setAttribute("data-value",item.id);
+                        a.setAttribute("style","display: inline-block !important;");
+                        a.append(item.name);
+                        var i = document.createElement("i");
+                        i.setAttribute("class","delete icon");
+                        a.append(i);
+                        $("#tagshow").append(a);
+                    }else {
+                        div.setAttribute("class","item");
+                    }
+
+                    div.setAttribute("data-value",item.id);
+                    div.append(item.name);
+                    $("#tagMenu").append(div);
+                })
+            }
+        })
+    }
+
+    function InitTypeMenu(typeId){
+        $.ajax({
+            url: myhost + "/blog/type/list",
+            type: "GET",
+            crossDomain: true,
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                "size": 10,
+                "page": 1,
+            }),
+            // <div class="item" data-value="1">java</div>
+            success: function (result) {
+
+                $.each(result.data,function (index,item) {
+                    var div = document.createElement("div");
+                    if(typeId != null && typeId == item.id){
+                        div.setAttribute("class","item active selected");
+                        document.getElementById("defTypeText").append(item.name);
+                    }else {
+                        div.setAttribute("class","item");
+                        document.getElementById("defTypeText").append("");
+                    }
+                    div.setAttribute("data-value",item.id);
+                    div.append(item.name);
+                    $("#typeMenu").append(div);
+                })
+            }
+        })
+    }
+
+
+    function postBlog(input){
+        var articleId = sessionStorage.getItem("updatId");
+        var status;
+        if(input ==1){  //发布
+            status = new Boolean(1);
+        }else {//保存
+            status = new Boolean(0);
+        }
+        var title = $('#title').val();
+        var inputCopyRight = document.getElementById("copyRightStatus").getAttribute("value");
+        if (inputCopyRight == 1){
+            var copyRight = new Boolean(1);
+        }else{
+            var copyRight = new Boolean(0);
+        }
+
+        var type = document.getElementById("typeValue").getAttribute("value");
+
+
+        var tag = document.getElementById("tagValue").getAttribute("value");
+        var tags = tag.split(",");
+
+        var content = contentEditor.getMarkdown();
+
+        var picture = $('#indexPicture').val();
+        var recommend = document.getElementById("recommend").checked;
+        var appreciation = document.getElementById("appreciation").checked;
+        var comment = document.getElementById("comment").checked;
+
+
+        var method ;
+        if(blogId != null){
+            method = "PUT";
+        }else{
+            method = "POST";
+        }
+        $.ajax({
+            url: myhost + "/blog/article",
+            type: method,
+            crossDomain: true,
+            contentType: "application/json",
+            dataType: "json",
+            headers : {'Authorization':token},
+            data: JSON.stringify({
+                "id":articleId,
+                "title":title,
+                "summary":null,
+                "userId":user[0],
+                "typeId":type,
+                "tags":tags,
+                "picture":picture,
+                "copyRight":copyRight,
+                "recommend":recommend,
+                "commentabled":comment,
+                "appreciation":appreciation,
+                "status":status,
+                "content":content
+            }),
+            success:function (result) {
+                alert("成功");
+                window.location.href = "blogs.html";
+            }
+        });
+    }
+
+
+
+    function InitBlogContent(){
+        $.ajax({
+            url: myhost + "/blog/article/"+blogId,
+            type: "GET",
+            crossDomain: true,
+            contentType: "application/json",
+            dataType: "json",
+            headers : {'Authorization':token},
+            async:false,
+            success: function (result) {
+                var info = result.data;
+                tagList = info.tags;
+                if(info.copyRight){  //发布
+                    document.getElementById("copyRightStatus").setAttribute("valuse","1");
+                }else {//保存
+                    document.getElementById("copyRightStatus").setAttribute("valuse","2");
+                }
+                $("#title").val(info.title);
+
+                document.getElementById("typeValue").setAttribute("value",info.typeId);
+                // $("#typeValue").value = info.typeId;
+                InitTypeMenu(info.typeId);
+                InitTagMenu(info.tags);
+
+
+                var typeText = document.createElement("div");
+                typeText.setAttribute("class","text");
+
+                $("#md-content_value").empty();
+
+                document.getElementById("md-content_value").append(info.content);
+                // contentEditor.setMarkdown(info.content);
+
+                $("#indexPicture").val(info.picture);
+                document.getElementById("recommend").setAttribute("checked","true");
+                document.getElementById("appreciation").setAttribute("checked","true");
+                document.getElementById("comment").setAttribute("checked","true");
+
+                $("#publish-btn").empty();
+                document.getElementById("publish-btn").append("修改");
+
+            }
+        })
+    }
+
+
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
+
+    // $('#save-btn').click(function () {
+    //     console.log($("#blog-form").getHTML());
+    // });
+    //
+    //
+    // $('#publish-btn').click(function () {
+    //     // $('#blog-form').submit();
+    // });
+
+
+    $('.ui.form').form({
+        fields : {
+            title : {
+                identifier: 'title',
+                rules: [{
+                    type : 'empty',
+                    prompt: '标题：请输入博客标题'
+                }]
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

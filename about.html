@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>关于我</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="static/css/myStyle.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+</head>
+<body>
+    <!--导航-->
+    <nav id="header">
+        <script>
+            $("#header").load("template.html #header",function () {
+                $("#aboutA").attr("class","m-item item m-mobile-hide active");
+                $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
+
+                $('.menu.toggle').click(function () {
+                    $('.m-item').toggleClass('m-mobile-hide');
+                });
+                $('.ui.dropdown').dropdown({
+                    on : 'hover'
+                });
+            });
+        </script>
+    </nav>
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-big">
+        <div class="ui container">
+            <div class="ui stackable grid">
+                <div class="eleven wide column">
+                    <div class="ui segment">
+                        <img src="https://images3.alphacoders.com/979/thumb-1920-979128.jpg" alt="" class="ui round image">
+                    </div>
+                </div>
+                <div class="five wide column">
+                    <div class="ui top attached segment">
+                        <div class="ui header">关于我</div>
+                    </div>
+                    <div class="ui attached segment">
+                        <p class="m-text">
+                            也不知道写些啥
+                        </p>
+                        <p class="m-text">
+                            随便填点字
+                        </p>
+                    </div>
+                    <div class="ui attached segment">
+                        <div class="ui orange basic left pointing label">美剧</div>
+                        <div class="ui orange basic left pointing label">编程</div>
+                        <div class="ui orange basic left pointing label">games</div>
+                        <div class="ui orange basic left pointing label">运动</div>
+                    </div>
+                    <div class="ui attached segment">
+                        <div class="ui teal basic left pointing label m-margin-tb-thiny">java</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-thiny">html</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-thiny">javascrip</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-thiny">MySQL</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-thiny">Linux</div>
+                    </div>
+                    <div class="ui bottom attached segment">
+                        <a href="https://github.com/ChunKitAu" class="ui circular icon button"><i class="github icon"></i></a>
+                        <a href="#" class="ui wechat circular icon button"><i class="weixin icon"></i></a>
+                        <a href="#" class="ui qq circular icon button" data-content="570137511" data-position="bottom center"><i class="qq icon"></i></a>
+                    </div>
+
+                    <div class="ui wechat-qr flowing popup top left transition hidden" >
+                        <img src="./static/images/wechat.png" alt="" class="ui rounded image" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--底部footer-->
+    <footer id="footer">
+        <script>
+            $("#footer").load("template.html #footer");
+        </script>
+    </footer>
+
+
+
+<script src="static/js/commonJS.js"></script>
+<script>
+    $('.qq').popup();
+
+    $('.wechat').popup({
+        popup: $('.wechat-qr.popup'),
+        position:'bottom center'
+    });
+</script>
+</body>
+</html>

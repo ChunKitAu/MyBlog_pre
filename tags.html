@@ -12,19 +12,7 @@
 <body>
     <!--导航-->
     <nav id="header">
-        <script>
-            $("#header").load("template.html #header",function () {
-                $("#tagsA").attr("class","m-item item m-mobile-hide active");
-                $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
-
-                $('.menu.toggle').click(function () {
-                    $('.m-item').toggleClass('m-mobile-hide');
-                });
-                $('.ui.dropdown').dropdown({
-                    on : 'hover'
-                });
-            });
-        </script>
+        <script src="static/js/pre/menuFix.js"></script>
     </nav>
     <!--中间内容-->
     <div class="m-container-small m-padded-tb-big">
@@ -73,15 +61,16 @@
     <script src="static/js/commonJS.js"></script>
     <script src="static/js/pre/initBlog.js"></script>
     <script src="static/js/pre/toHref.js"></script>
-
+    <script src="static/js/pre/menuFix.js"></script>
     <script>
         var tagId;
+        var pageno =1;
         $(function () {
             tagId = sessionStorage.getItem("tagId");
             if(tagId != null)
                 sessionStorage.removeItem("tagId");
             InitTagHeader();
-            InitTagBolg(pageno);
+            InitTagBolg();
             $(window).scroll(function() {
                 var scrollTop = $(this).scrollTop(),scrollHeight = $(document).height(),windowHeight = $(this).height();
                 var positionValue = (scrollTop + windowHeight) - scrollHeight;
@@ -143,7 +132,7 @@
         }
 
 
-        function InitTagBolg(pageno) {
+        function InitTagBolg() {
             $.ajax({
                 url: myhost + "/blog/article/tag/list/"+tagId,
                 type: "GET",
@@ -152,7 +141,7 @@
                 dataType: "json",
                 data: {
                     "page": pageno,
-                    "size": size
+                    "size": 10
                 },
                 success: function (result) {
                     totalPages = result.data[0].totalPgae;

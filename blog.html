@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>详情页</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="static/lib/editormd/css/editormd.preview.css" />
     <link rel="stylesheet" href="./static/css/typo.css">
     <link rel="stylesheet" href="./static/lib/tocbot/tocbot.css">
     <link rel="stylesheet" href="./static/css/animate.css">
@@ -12,27 +13,16 @@
     <link rel="stylesheet" href="static/lib/prism/prism.css">
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-
 </head>
 <body>
-    <!--导航-->
-    <nav id="header">
-        <script>
-            $("#header").load("template.html #header",function () {
-                $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
 
-                $('.menu.toggle').click(function () {
-                    $('.m-item').toggleClass('m-mobile-hide');
-                });
-                $('.ui.dropdown').dropdown({
-                    on : 'hover'
-                });
-            });
-        </script>
-    </nav>
+    <!--导航-->
+    <div id="header">
+        <script src="static/js/pre/menuFix.js"></script>
+    </div>
 
     <!--中间内容-->
-    <div id="waypoint" class="m-container-small m-padded-tb-big animated fadeIn">
+    <div  class="m-container-small m-margin-top-small animated fadeIn">
         <div class="ui container">
             <div class="ui top attached segment">
                 <div class="ui  horizontal link list">
@@ -54,7 +44,8 @@
                 <!--图片区域-->
                 <img id="picture" src="" class="ui fluid rounded image">
             </div>
-            <div class="ui  attached padded segment">
+
+            <div class="ui  attached padded segment" id="blogCenter">
                 <!--内容-->
                 <div class="ui right aligned basic segment ">
                     <div id="copyRight" class="ui orange basic label"></div>
@@ -64,7 +55,7 @@
                 <br>
 
                 <div id="content" class="typo typo-selection  js-toc-content  m-padded-lr-responsive m-padded-tb-large">
-
+                    <textarea id="textContent" style="display: none"></textarea>
                 </div>
 
                 <!--标签-->
@@ -89,9 +80,17 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div id="waypoint_toc" class="right ui rail" style="display: none">
+                    <div  class="ui sticky js-toc" >
+                    </div>
+                </div>
+
+
             </div>
             <div class="ui  attached positive message">
-            <!--博客信息-->
+                <!--博客信息-->
                 <div class="ui middle aligned grid">
                     <div class="eleven wide column">
                         <ul class="list">
@@ -102,7 +101,7 @@
                         </ul>
                     </div>
                     <div class="five wide column">
-                        <img src="./static/images/wechat.jpg" alt="" class="ui right floated rounded bordered image" style="width: 110px">
+                        <img src="./static/images/wechat.png" alt="" class="ui right floated rounded bordered image" style="width: 110px">
                     </div>
                 </div>
             </div>
@@ -113,10 +112,10 @@
                 <div class="ui teal segment">
                     <div class="ui comments" id="commentDiv">
                         <h3 class="ui dividing header">Comments</h3>
-                            <!--评论主体-->
+                        <!--评论主体-->
                     </div>
                 </div>
-                <div class="ui form">
+                <div class="ui form segment">
                     <h4 class="ui header teal" id="parnetName"></h4>
                     <div class="field">
                         <textarea id="commend" name="commend" placeholder="请输入评论信息"></textarea>
@@ -135,8 +134,9 @@
                             </div>
                         </div>
                         <div class="field m-mobile-wide m-margin-bottom-small">
-                            <buttom id="commentpost-btn" class="ui  button m-mobile-wide"><i class="edit icon"></i>提交</buttom>
+                            <buttom id="commentpost-btn" class="ui  teal  submit button"><i class="edit icon"></i>提交</buttom>
                         </div>
+                        <div class="ui error message"></div>
                     </div>
                 </div>
             </div>
@@ -147,19 +147,15 @@
     <div id="leftToolBar">
         <div id="toolbar" class="m-padded  m-fixed m-right-bottom">
             <div class="ui vertical icon buttons">
-                <button type="button" class="ui toc teal button">目录</button>
                 <a href="#commend"   class="ui teal button">留言</a>
                 <button class="ui wechat icon  button"><i class="weixin icon"></i></button>
                 <div id="tocTop-button" class="ui icon button"><i class="chevron up icon"></i></div>
             </div>
         </div>
-        <div class="ui toc-container flowing popup top left transition hidden" style="width: 250px !important;">
-            <!-- 生成的目录-->
-            <ol class="js-toc"></ol>
-        </div>
+
 
         <div  id="qrcode" class="ui wechat-qr flowing popup top left transition hidden " style="width: 130px !important;" >
-            <!--        <img src="./static/images/wechat.jpg" alt="" class="ui rounded image" style="width: 120px">-->
+                    <img src="./static/images/wechat.png" alt="" class="ui rounded image" style="width: 120px">
         </div>
     </div>
     <!--底部footer-->
@@ -169,53 +165,151 @@
         </script>
     </footer>
 
+
+
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+<!--<script src="js/jquery.min.js"></script>-->
+<script src="static/lib/editormd/lib/marked.min.js"></script>
+<script src="static/lib/editormd/lib/prettify.min.js"></script>
+<script src="static/lib/editormd/lib/raphael.min.js"></script>
+<script src="static/lib/editormd/lib/underscore.min.js"></script>
+<script src="static/lib/editormd/lib/sequence-diagram.min.js"></script>
+<script src="static/lib/editormd/lib/flowchart.min.js"></script>
+<script src="static/lib/editormd/lib/jquery.flowchart.min.js"></script>
 
 
 <script src="./static/lib/tocbot/tocbot.min.js"></script>
 <script src="./static/lib/qrcode/qrcode.min.js"></script>
 <script src="./static/lib/waypoints/jquery.waypoints.min.js"></script>
 
+<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+
 <script src="static/js/commonJS.js"></script>
 <script src="static/js/pre/toHref.js"></script>
 <script src="static/js/pre/blog_comment.js"></script>
 
-<script>
-    var blogId ;
-    parentCommentId = null;
-    $(function () {
+<script src="static/lib/editormd/editormd.js"></script>
 
-        blogId = sessionStorage.getItem("blogId");
-        sessionStorage.removeItem("blogId");
-        if(blogId != null){
-            sessionStorage.removeItem("blogId");
-            InitArticle();
-        }else {
-            window.location.href = "index.html";
-        }
-
-
-        var doc_pre = $("#content pre");
-        console.log(doc_pre);
-        doc_pre.each(function(index){
-            console.log(index);
-            var lan_class = $(this).children().attr('class');
-            console.log(lan_class);
-            $(this).addClass(lan_class);
-
-            // var class_val = $(this).attr('class');
-            // var class_arr = new Array();
-            // class_arr = class_val.split(';');
-            // class_arr = class_arr['0'].split(':');
-            // var lan_class = 'language-'+class_arr['1'];
-            // var pre_content = '<code class="'+lan_class+'">'+$(this).html()+'</code>';
-
-            // $(this).html(pre_content);
+<script type="text/javascript">
+    var markdown;
+    var blogId = sessionStorage.getItem("blogId");
+    $(function() {
+        var testEditormdView ;
+        InitArticle();
+        testEditormdView = editormd.markdownToHTML("content", {
+            htmlDecode      : "style,script,iframe",  // you can filter tags decode
+            tocContainer    : ".js-toc",
+            toc             :false,
+            emoji           : true,
+            taskList        : true,
+            tex             : true,  // 默认不解析
+            flowChart       : true,  // 默认不解析
+            sequenceDiagram : true,  // 默认不解析
         });
-    })
+        $('.ui.sticky').sticky({
+                context: '#content'
+            });
+
+        //目录生成
+        tocbot.init({
+            //构建目录的容器
+            tocSelector: '.js-toc',
+            // 文章容器.
+            contentSelector: '.js-toc-content',
+            // 需要解析的标题
+            headingSelector: 'h1, h2',
+            positionFixedSelector: ".js-toc", //目录位置固定
+
+            scrollEndCallback: function (e) { //回调函数
+                // window.scrollTo(window.scrollX, window.scrollY - 80);
+                //修正滚动后页面的位置，80 是自己顶部栏的高度
+            },
+        });
+
+        $('#payButton').popup({
+            popup: $('.payQR.popup'),
+            on:'click',
+            position:'bottom center'
+        });
 
 
+        $('.wechat').popup({
+            popup: $('.wechat-qr.popup'),
+            position:'left center'
+        });
+
+        //生成二维码
+        var qrcode = new QRCode("qrcode", {
+            text: "http://jindo.dev.naver.com/collie",
+            width: 110,
+            height: 110,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        //平滑滚动
+        $('#tocTop-button').click(function () {
+            $(window).scrollTo(0,500);
+        });
+
+        //滚动检测
+        var waypoint = new Waypoint({
+            element: document.getElementById('blogCenter'),
+            handler: function(direction) {
+                $("#waypoint_toc").show();
+                if (direction == 'down') {
+                    $('#toolbar').show(100);
+                } else{
+                    $('#toolbar').hide(100);
+                }
+            }
+        })
+
+
+        $('.ui.form').form({
+            fields : {
+                commend : {
+                    identifier: 'commend',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入内容',
+                    }]
+                },
+                nickname : {
+                    identifier: 'nickname',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入姓名',
+                    }]
+                },
+                email : {
+                    identifier: 'email',
+                    rules: [{
+                        type : 'email',
+                        prompt: '请输入邮箱格式',
+                    },{
+                        type : 'email',
+                        prompt: '邮箱不能为空',
+                    }]
+                },
+            },
+        });
+
+        $('#commentpost-btn').click(function () {
+            var boo = $('.ui.form').form('validate form');
+            if (boo) {
+                postComment();
+            } else {
+                console.log('校验失败');
+            }
+        });
+
+    });
+
+</script>
+<script src="static/js/pre/menuFix.js"></script>
+<script>
     function getUserInfo(userId) {
         var user = new Array();
         $.ajax({
@@ -238,7 +332,7 @@
 
     function InitArticle() {
         $.ajax({
-            url: myhost + "/blog/article/html/"+blogId,
+            url: myhost + "/blog/article/"+blogId,
             type: "GET",
             crossDomain: true,
             contentType: "application/json",
@@ -260,11 +354,12 @@
                 $("#auth_createtime").append(result.data.createTime);
                 $("#views").append(result.data.views);
 
-                    $("#picture").src = result.data.picture ;
+                document.title =   result.data.title;
+
+
+                $("#picture").attr("src",result.data.picture) ;
 
                 $("#views").src = "https://picsum.photos/id/1005/800/450";
-
-                document.title =   result.data.title;
 
                 if(result.data.copyRight){
                     var div =  document.getElementById("copyRight");
@@ -276,8 +371,9 @@
                     div.append("转载");
                 }
                 $("#title").append(result.data.title);
-                $("#content").append(result.data.content);
+                $("#textContent").text(result.data.content);
 
+                document.title =   result.data.title;
 
                 //标签
                 var tags = document.getElementById("tags");
@@ -332,8 +428,8 @@
                 "parentCommentId":parentCommentId
             }),
             success: function (result) {
-               alert("评论成功");
-               $("#parnetName").empty();
+                alert("评论成功");
+                $("#parnetName").empty();
                 parentCommentId = null;
                 $("#commentDiv").empty();
                 InitCommends(blogId);
@@ -342,106 +438,5 @@
     }
 
 </script>
-    <script src="static/lib/prism/prism.js"></script>
-
-<script>
-
-    $('#payButton').popup({
-        popup: $('.payQR.popup'),
-        on:'click',
-        position:'bottom center'
-    });
-
-
-    //目录生成
-    tocbot.init({
-        // Where to render the table of contents.
-        tocSelector: '.js-toc',
-        // Where to grab the headings to build the table of contents.
-        contentSelector: '.js-toc-content',
-        // Which headings to grab inside of the contentSelector element.
-        headingSelector: 'h1, h2, h3',
-        // For headings inside relative or absolute positioned containers within content.
-        hasInnerContainers: true,
-    });
-    $('.toc.button').popup({
-        popup: $('.toc-container.popup'),
-        on:'click',
-        position:'left center'
-    });
-
-    $('.wechat').popup({
-        popup: $('.wechat-qr.popup'),
-        position:'left center'
-    });
-
-    //生成二维码
-    var qrcode = new QRCode("qrcode", {
-        text: "http://jindo.dev.naver.com/collie",
-        width: 110,
-        height: 110,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-    });
-
-    //平滑滚动
-    $('#tocTop-button').click(function () {
-        $(window).scrollTo(0,500);
-    });
-
-    //滚动检测
-    var waypoint = new Waypoint({
-        element: document.getElementById('waypoint'),
-        handler: function(direction) {
-            if (direction == 'down') {
-                $('#toolbar').show(100);
-            } else {
-                $('#toolbar').hide(500);
-            }
-            // console.log(direction);
-        }
-    })
-
-    $('.ui.form').form({
-        fields : {
-            commend : {
-                identifier: 'commend',
-                rules: [{
-                    type : 'empty',
-                    prompt: '请输入内容',
-                }]
-            },
-            nickname : {
-                identifier: 'nickname',
-                rules: [{
-                    type : 'empty',
-                    prompt: '请输入姓名',
-                }]
-            },
-            email : {
-                identifier: 'email',
-                rules: [{
-                    type : 'email',
-                    prompt: '请输入邮箱格式',
-                },{
-                    type : 'email',
-                    prompt: '邮箱不能为空',
-                }]
-            },
-        },
-    });
-
-    $('#commentpost-btn').click(function () {
-        var boo = $('.ui.form').form('validate form');
-        if (boo) {
-            postComment();
-        } else {
-            console.log('校验失败');
-        }
-
-    });
-</script>
-
 </body>
 </html>

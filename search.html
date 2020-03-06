@@ -12,18 +12,7 @@
 <body>
     <!--导航-->
     <nav id="header">
-        <script>
-            $("#header").load("template.html #header",function () {
-                $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
-
-                $('.menu.toggle').click(function () {
-                    $('.m-item').toggleClass('m-mobile-hide');
-                });
-                $('.ui.dropdown').dropdown({
-                    on : 'hover'
-                });
-            });
-        </script>
+        <script src="static/js/pre/menuFix.js"></script>
     </nav>
     <!--中间内容-->
     <div class="m-container-small m-padded-tb-big">

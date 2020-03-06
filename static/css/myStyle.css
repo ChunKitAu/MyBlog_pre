@@ -106,11 +106,35 @@ body {
     right: 0;
 }
 
+.m-top{
+    position: fixed !important;
+    top: 0 !important;
+    _position:absolute !important;/* 把导航栏位置定义为绝对位置  关键*/
+    /*z-index:9999; !important;!* 让导航栏浮在网页的高层位置，遇到flash和图片时候也能始终保持最外层 *!*/
+
+}
+
+/*  设置toc目录的位置  */
+.js-toc{
+    position: absolute;
+    right: 90px!important;
+    margin-top: 100px!important;
+}
+
+
+.m-right-toc {
+    position: absolute;
+    right: 200px;
+}
 /*------display------*/
 .m-inline-block {
     display: inline-block !important;
 }
 
+
+nav{
+
+}
 
 /*-----container*/
 
@@ -140,6 +164,7 @@ body {
     bottom: 0 !important;
     right: 0 !important;
 }
+
 
 
 /*-----color-----*/
@@ -173,4 +198,30 @@ body {
     .m-mobile-wide {
         width: 100% !important;
     }
+    .js-toc{
+        display: none !important;
+    }
+}
+
+
+/* 菜单*/
+.main.menu {
+    margin-top: 4em;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    transition: box-shadow 0.5s ease,
+    padding 0.5s ease;
+    height: 50px;
+}
+
+.main.menu .item img.logo {
+    margin-right: 1.5em;
+}
+
+
+.main.menu.fixed {
+    background-color: #0a001f;
+    border: 1px solid #0a001f;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
 }

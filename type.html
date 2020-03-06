@@ -12,19 +12,7 @@
 <body>
     <!--导航-->
     <nav id="header">
-        <script>
-            $("#header").load("template.html #header",function () {
-                $("#typeA").attr("class","m-item item m-mobile-hide active");
-                $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
-
-                $('.menu.toggle').click(function () {
-                    $('.m-item').toggleClass('m-mobile-hide');
-                });
-                $('.ui.dropdown').dropdown({
-                    on : 'hover'
-                });
-            });
-        </script>
+        <script src="static/js/pre/menuFix.js"></script>
     </nav>
 
     <!--中间内容-->
@@ -77,15 +65,16 @@
 <script src="static/js/commonJS.js"></script>
 <script src="static/js/pre/toHref.js"></script>
 <script src="static/js/pre/initBlog.js"></script>
-
+<script src="static/js/pre/menuFix.js"></script>
 <script>
     var typeId;
+    var pageno =1;
     $(function () {
         typeId = sessionStorage.getItem("typeId");
         if(typeId != null)
             sessionStorage.removeItem("typeId");
         InitTypeHeader();
-        InitTypeBody(pageno);
+        InitTypeBody();
         $(window).scroll(function() {
             var scrollTop = $(this).scrollTop(),scrollHeight = $(document).height(),windowHeight = $(this).height();
             var positionValue = (scrollTop + windowHeight) - scrollHeight;
@@ -154,7 +143,7 @@
         });
     }
 
-    function InitTypeBody(pageno) {
+    function InitTypeBody() {
         $.ajax({
             url: myhost + "/blog/article/type/list/"+typeId,
             dataType: "JSON",
@@ -163,7 +152,7 @@
             crossDomain: true,
             data: {
                 "page": pageno,
-                "size": size
+                "size": 10
             },
             success: function (result) {
                 totalPages = result.data[0].totalPgae;

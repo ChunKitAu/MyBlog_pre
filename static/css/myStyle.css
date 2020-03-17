@@ -116,25 +116,21 @@ body {
 
 /*  设置toc目录的位置  */
 .js-toc{
-    position: absolute;
-    right: 90px!important;
+    position: relative;
+    left: 1110px!important;
     margin-top: 100px!important;
 }
 
 
 .m-right-toc {
     position: absolute;
-    right: 200px;
+    right: 300px!important;
 }
 /*------display------*/
 .m-inline-block {
     display: inline-block !important;
 }
 
-
-nav{
-
-}
 
 /*-----container*/
 
@@ -174,7 +170,6 @@ nav{
 .m-teal {
     color: #00B5AD !important;
 }
-
 
 .m-mobile-show {
     display: none !important;

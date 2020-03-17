@@ -14,21 +14,7 @@
 
   <!--导航-->
   <nav id="header">
-    <script>
-      $("#header").load("admin_template.html #header",function () {
-        var loginUser = sessionStorage.getItem("user");
-        user = loginUser.split(",");
-        $("#avatar").src = user[1];
-        document.getElementById("pubilc_userName").append(user[2]);
-
-        $('.menu.toggle').click(function () {
-          $('.m-item').toggleClass('m-mobile-hide');
-        });
-        $('.ui.dropdown').dropdown({
-          on : 'hover'
-        });
-      });
-    </script>
+    <script src="../static/js/admin/header.js"></script>
   </nav>
 
 
@@ -117,7 +103,7 @@
               exitTag[index] = item.name;
               a.append(item.name);
               var div = document.createElement("div");
-              a.setAttribute("class","ui teal basic left pointing large label m-margin-tb-thiny");
+              a.setAttribute("class","ui teal basic left pointing large label m-margin-top-small ");
               div.setAttribute("class","detail");
               div.append(item.num);
 

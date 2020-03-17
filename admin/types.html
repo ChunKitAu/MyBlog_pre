@@ -14,21 +14,7 @@
 
   <!--导航-->
   <nav id="header">
-    <script>
-      $("#header").load("admin_template.html #header",function () {
-        var loginUser = sessionStorage.getItem("user");
-        user = loginUser.split(",");
-        $("#avatar").src = user[1];
-        document.getElementById("pubilc_userName").append(user[2]);
-
-        $('.menu.toggle').click(function () {
-          $('.m-item').toggleClass('m-mobile-hide');
-        });
-        $('.ui.dropdown').dropdown({
-          on : 'hover'
-        });
-      });
-    </script>
+    <script src="../static/js/admin/header.js"></script>
   </nav>
 
   <!--中间内容-->
@@ -62,7 +48,6 @@
 
 
       <div class="ui attached segment m-padded-tb-large" id="typeList">
-
         <!--分类-->
       </div>
 
@@ -114,7 +99,7 @@
             exitType[index] = item.name;
 
             var divtop = document.createElement('div');
-            divtop.setAttribute("class","ui labeled button m-margin-tb-thiny");
+            divtop.setAttribute("class","ui labeled button label m-margin-top-small");
 
             var a = document.createElement('a');
             // a.setAttribute("onclick","toTypeHref("+item.id+")");

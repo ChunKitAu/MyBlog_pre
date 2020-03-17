@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>详情页</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
-    <link rel="stylesheet" href="static/lib/editormd/css/editormd.preview.css" />
-    <link rel="stylesheet" href="./static/css/typo.css">
-    <link rel="stylesheet" href="./static/lib/tocbot/tocbot.css">
-    <link rel="stylesheet" href="./static/css/animate.css">
-    <link rel="stylesheet" href="static/css/myStyle.css">
-    <link rel="stylesheet" href="static/lib/prism/prism.css">
+    <link rel="stylesheet" href="../static/lib/editormd/css/editormd.preview.css" />
+    <link rel="stylesheet" href="../static/css/typo.css">
+    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="../static/css/myStyle.css">
+    <link rel="stylesheet" href="../static/lib/prism/prism.css">
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 </head>
@@ -18,7 +18,7 @@
 
     <!--导航-->
     <div id="header">
-        <script src="static/js/pre/menuFix.js"></script>
+        <script src="../static/js/pre/header.js"></script>
     </div>
 
     <!--中间内容-->
@@ -70,11 +70,11 @@
                     <div class="ui orange basic label">
                         <div class="ui images" style="font-size: inherit !important;">
                             <div class="image">
-                                <img src="./static/images/bg.png" alt="" class="ui rounded bordered image" style="width: 120px">
+                                <img src="../static/images/bg.png" alt="" class="ui rounded bordered image" style="width: 120px">
                                 <div>支付宝</div>
                             </div>
                             <div class="image">
-                                <img src="./static/images/bg.png" alt="" class="ui rounded bordered image " style="width: 120px">
+                                <img src="../static/images/bg.png" alt="" class="ui rounded bordered image " style="width: 120px">
                                 <div>微信</div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                         </ul>
                     </div>
                     <div class="five wide column">
-                        <img src="./static/images/wechat.png" alt="" class="ui right floated rounded bordered image" style="width: 110px">
+                        <img src="../static/images/wechat.png" alt="" class="ui right floated rounded bordered image" style="width: 110px">
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@
 
 
         <div  id="qrcode" class="ui wechat-qr flowing popup top left transition hidden " style="width: 130px !important;" >
-                    <img src="./static/images/wechat.png" alt="" class="ui rounded image" style="width: 120px">
+                    <img src="../static/images/wechat.png" alt="" class="ui rounded image" style="width: 120px">
         </div>
     </div>
     <!--底部footer-->
@@ -169,26 +169,26 @@
 
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <!--<script src="js/jquery.min.js"></script>-->
-<script src="static/lib/editormd/lib/marked.min.js"></script>
-<script src="static/lib/editormd/lib/prettify.min.js"></script>
-<script src="static/lib/editormd/lib/raphael.min.js"></script>
-<script src="static/lib/editormd/lib/underscore.min.js"></script>
-<script src="static/lib/editormd/lib/sequence-diagram.min.js"></script>
-<script src="static/lib/editormd/lib/flowchart.min.js"></script>
-<script src="static/lib/editormd/lib/jquery.flowchart.min.js"></script>
+<script src="../static/lib/editormd/lib/marked.min.js"></script>
+<script src="../static/lib/editormd/lib/prettify.min.js"></script>
+<script src="../static/lib/editormd/lib/raphael.min.js"></script>
+<script src="../static/lib/editormd/lib/underscore.min.js"></script>
+<script src="../static/lib/editormd/lib/sequence-diagram.min.js"></script>
+<script src="../static/lib/editormd/lib/flowchart.min.js"></script>
+<script src="../static/lib/editormd/lib/jquery.flowchart.min.js"></script>
 
 
-<script src="./static/lib/tocbot/tocbot.min.js"></script>
-<script src="./static/lib/qrcode/qrcode.min.js"></script>
-<script src="./static/lib/waypoints/jquery.waypoints.min.js"></script>
+<script src="../static/lib/tocbot/tocbot.min.js"></script>
+<script src="../static/lib/qrcode/qrcode.min.js"></script>
+<script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
 
 <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
 
-<script src="static/js/commonJS.js"></script>
-<script src="static/js/pre/toHref.js"></script>
-<script src="static/js/pre/blog_comment.js"></script>
+<script src="../static/js/commonJS.js"></script>
+<script src="../static/js/pre/toHref.js"></script>
+<script src="../static/js/pre/blog_comment.js"></script>
 
-<script src="static/lib/editormd/editormd.js"></script>
+<script src="../static/lib/editormd/editormd.js"></script>
 
 <script type="text/javascript">
     var markdown;
@@ -308,7 +308,7 @@
     });
 
 </script>
-<script src="static/js/pre/menuFix.js"></script>
+<script src="../static/js/pre/header.js"></script>
 <script>
     function getUserInfo(userId) {
         var user = new Array();
@@ -332,7 +332,7 @@
 
     function InitArticle() {
         $.ajax({
-            url: myhost + "/blog/article/"+blogId,
+            url: myhost + "/blog/article/html/"+blogId,
             type: "GET",
             crossDomain: true,
             contentType: "application/json",

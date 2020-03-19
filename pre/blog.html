@@ -147,15 +147,10 @@
         <div id="toolbar" class="m-padded  m-fixed m-right-bottom">
             <div class="ui vertical icon buttons">
                 <a href="#commend"   class="ui teal button">留言</a>
-                <button class="ui wechat icon  button"><i class="weixin icon"></i></button>
                 <div id="tocTop-button" class="ui icon button"><i class="chevron up icon"></i></div>
             </div>
         </div>
 
-
-        <div  id="qrcode" class="ui wechat-qr flowing popup top left transition hidden " style="width: 130px !important;" >
-                    <img src="../static/images/wechat.png" alt="" class="ui rounded image" style="width: 120px">
-        </div>
     </div>
     <!--底部footer-->
     <footer id="footer">
@@ -167,7 +162,6 @@
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <script src="../static/lib/highLights/highlight.pack.js"></script>
 <script src="../static/lib/tocbot/tocbot.min.js"></script>
-<script src="../static/lib/qrcode/qrcode.min.js"></script>
 <script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
 
 <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
@@ -204,15 +198,6 @@
             position:'left center'
         });
 
-        //生成二维码
-        var qrcode = new QRCode("qrcode", {
-            text: "http://jindo.dev.naver.com/collie",
-            width: 110,
-            height: 110,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
 
         //平滑滚动
         $('#tocTop-button').click(function () {

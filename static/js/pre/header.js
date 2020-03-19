@@ -1,4 +1,4 @@
-$("#header").load("template.html #header",function () {
+$("#header").load("../pre/template.html #header",function () {
     $("#searchI").attr("onclick","  sessionStorage.setItem(\"blogKeyword\",$(\"#query\").val());  window.location.href = \"search.html\" " );
 
     $('.menu.toggle').click(function () {

@@ -17,6 +17,10 @@ body {
     padding-top: 0.2em !important;
     padding-bottom: 0.2em !important;
 }
+.m-padded-tb-mini-2 {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
 .m-padded-tb-tiny {
     padding-top: 0.3em !important;
     padding-bottom: 0.3em !important;
@@ -57,6 +61,14 @@ body {
     height: 100%;!important;
 }
 
+
+/*-------顶栏固定------*/
+nav{
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    background: #0f0f10;
+}
 /*-----代码高亮行号-----*/
 .hljs {
     border: 0;
@@ -167,6 +179,7 @@ body {
 .m-container {
     max-width: 72em !important;
     margin: auto !important;
+
 }
 .m-container-small {
     max-width: 60em !important;

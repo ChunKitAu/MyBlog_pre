@@ -7,15 +7,6 @@ $("#header").load("../pre/template.html #header",function () {
     $('.ui.dropdown').dropdown({
         on : 'hover'
     });
-    //导航栏固定
-    // fix main menu to page on passing
-    $('.main.menu').visibility({
-        type: 'fixed'
-    });
-    // show dropdown on hover
-    $('.main.menu  .ui.dropdown').dropdown({
-        on: 'hover'
-    });
     var path = window.location.pathname;
     var pathName = path.substring(path.lastIndexOf("/")+1,path.length);
     switch (pathName) {

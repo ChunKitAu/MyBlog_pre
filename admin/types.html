@@ -16,7 +16,7 @@
   <nav id="header">
     <script src="../static/js/admin/header.js"></script>
   </nav>
-
+  <br><br>
   <!--中间内容-->
   <div  class="m-container-small m-padded-tb-big">
     <div class="ui container">
@@ -58,12 +58,7 @@
   <!--底部footer-->
   <footer id="footer">
     <script>
-      $("#header").load("admin_template.html #header",function () {
-        var loginUser = sessionStorage.getItem("user");
-        user = loginUser.split(",");
-        $("#avatar").src = user[1];
-        document.getElementById("pubilc_userName").append(user[2]);
-      });
+      $("#footer").load("admin_template.html #footer");
     </script>
   </footer>
 

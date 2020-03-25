@@ -62,7 +62,7 @@ function Blog(name,contents) {
                 if(result.data.avatar != null)
                     avatardiv.src = result.data.avatar;
                 else
-                    avatardiv.src ="https://picsum.photos/id/1015/800/450";
+                    avatardiv.src ="../static/images/img_30.jpg";
                 usernameA.innerText = result.data.nickname;
                 usernameA.href = "#";
             }

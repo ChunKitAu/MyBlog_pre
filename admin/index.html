@@ -4,52 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>博客管理</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/lib/semantic-ui2.4.1/semantic.min.css">
     <link rel="stylesheet" href="../static/css/myStyle.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="../static/lib/jquery3.4.1/jquery.min.js"></script>
     <script src="../static/js/admin/checkLogin.js"></script>
 </head>
 <body>
-    <!--导航-->
-    <nav id="header">
-        <script src="../static/js/admin/header.js"></script>
-    </nav>
+<!--导航-->
+<nav id="header">
+    <script src="../static/js/admin/header.js"></script>
+</nav>
 
-    <div class="ui attached pointing menu">
-        <div class="ui container">
-            <div class="right menu">
-                <a href="blogs-input.html" class="item">发布</a>
-                <a href="blogs.html" class="teal item active">列表</a>
-            </div>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a href="blogs-input.html" class="item">发布</a>
+            <a href="blogs.html" class="teal item active">列表</a>
         </div>
     </div>
+</div>
 
-    <!--中间内容-->
-    <div class="m-container-small m-padded-tb-big">
-        <div class="ui container">
-            <div class="ui message success large">
-                <h2>Hello</h2>
-            </div>
-            <img src="https://picsum.photos/id/1002/100/100" alt="" class="ui avatar image">
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <div class="ui message success large">
+            <h2>Hello</h2>
         </div>
+<!--        <img src="../static/images/img_3.jpg" alt="" class="ui avatar image">-->
     </div>
-    <br><br><br><br><br><br><br><br><br><br><br><br>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br>
 
-    <!--底部footer-->
-    <footer id="footer">
-        <script>
-            $("#footer").load("admin_template.html #footer");
-        </script>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
-
-    <script src="../static/js/commonJS.js"></script>
-<script>
-
-</script>
+<!--底部footer-->
+<footer id="footer">
+    <script>
+    $("#footer").load("admin_template.html #footer");
+    </script>
+</footer>
+<script src="../static/lib/semantic-ui2.4.1/semantic.min.js"></script>
+<script src="../static/js/commonJS.js"></script>
 </body>
-
-
 </html>

@@ -42,7 +42,7 @@
 
   MT("import",
      "[keyword function] [variable foo]() {",
-     "  [keyword import] [def $] [keyword from] [string 'jquery'];",
+     "  [keyword import] [def $] [keyword from] [string 'jquery3.4.1'];",
      "  [keyword module] [def crypto] [keyword from] [string 'crypto'];",
      "  [keyword import] { [def encrypt], [def decrypt] } [keyword from] [string 'crypto'];",
      "}");

@@ -521,7 +521,7 @@
                             else if (settings.flowChart && !settings.sequenceDiagram)
                             {
                                 editormd.loadScript(loadPath + "flowchart.min", function() {
-                                    editormd.loadScript(loadPath + "jquery.flowchart.min", function() {
+                                    editormd.loadScript(loadPath + "jquery3.4.1.flowchart.min", function() {
                                         _this.loadedDisplay();
                                     });
                                 });
@@ -529,7 +529,7 @@
                             else if (settings.flowChart && settings.sequenceDiagram)
                             {
                                 editormd.loadScript(loadPath + "flowchart.min", function() {
-                                    editormd.loadScript(loadPath + "jquery.flowchart.min", function() {
+                                    editormd.loadScript(loadPath + "jquery3.4.1.flowchart.min", function() {
                                         editormd.loadScript(loadPath + "sequence-diagram.min", function() {
                                             _this.loadedDisplay();
                                         });

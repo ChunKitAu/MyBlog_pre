@@ -62,13 +62,22 @@ body {
 }
 
 
-/*-------顶栏固定------*/
-nav{
-    position: fixed;
-    width: 100%;
-    z-index: 10;
-    background: #0f0f10;
+/*-------todo 顶栏固定------*/
+.nav{
+    position: fixed !important;
+    width: 100% !important;
+    top: 0; !important;
+    background: #0f0f10 !important;
 }
+
+.m-top{
+    position: fixed !important;
+    top: 0 !important;
+    !important;/* 把导航栏位置定义为绝对位置  关键*/
+    /*z-index:9999; !important;!* 让导航栏浮在网页的高层位置，遇到flash和图片时候也能始终保持最外层 *!*/
+
+}
+
 /*-----代码高亮行号-----*/
 .hljs {
     border: 0;
@@ -148,13 +157,7 @@ nav{
     right: 0;
 }
 
-.m-top{
-    position: fixed !important;
-    top: 0 !important;
-    _position:absolute !important;/* 把导航栏位置定义为绝对位置  关键*/
-    /*z-index:9999; !important;!* 让导航栏浮在网页的高层位置，遇到flash和图片时候也能始终保持最外层 *!*/
 
-}
 
 /*  设置toc目录的位置  */
 .js-toc{

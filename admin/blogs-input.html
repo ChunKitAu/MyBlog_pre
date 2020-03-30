@@ -17,7 +17,6 @@
     <nav id="header">
         <script src="../static/js/admin/header.js"></script>
     </nav>
-    <br><br><br>
     <div class="ui attached pointing menu">
         <div class="ui container">
             <div class="right menu">
@@ -79,13 +78,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="filed">
-                    <div class="ui left labeled fluid input">
-                        <label  class="ui teal basic label">首图</label>
-                        <input type="text" id="indexPicture" placeholder="首图引用地址">
                     </div>
                 </div>
 
@@ -313,7 +305,6 @@
 
         var content = contentEditor.getMarkdown();
 
-        var picture = $('#indexPicture').val();
         var recommend = document.getElementById("recommend").checked;
         var appreciation = document.getElementById("appreciation").checked;
         var comment = document.getElementById("comment").checked;
@@ -339,7 +330,6 @@
                 "userId":user[0],
                 "typeId":type,
                 "tags":tags,
-                "picture":picture,
                 "copyRight":copyRight,
                 "recommend":recommend,
                 "commentabled":comment,
@@ -392,7 +382,6 @@
                 document.getElementById("md_content_value").append(info.content);
                 // contentEditor.setMarkdown(info.content);
 
-                $("#indexPicture").val(info.picture);
                 document.getElementById("recommend").setAttribute("checked","true");
                 document.getElementById("appreciation").setAttribute("checked","true");
                 document.getElementById("comment").setAttribute("checked","true");
@@ -440,13 +429,6 @@
                     prompt: '请选择标签'
                 }]
             },
-            indexPicture : {
-                identifier: 'indexPicture',
-                rules: [{
-                    type : 'empty',
-                    prompt: '请输入首图'
-                }]
-            }
         }
     });
 

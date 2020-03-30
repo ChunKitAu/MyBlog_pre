@@ -19,7 +19,6 @@
     <div id="header">
         <script src="../static/js/pre/header.js"></script>
     </div>
-    <br><br>
     <!--中间内容-->
     <div  class="m-container-small m-margin-top-small animated fadeIn">
         <div class="ui container">
@@ -41,7 +40,7 @@
             </div>
             <div class="ui  attached segment">
                 <!--图片区域-->
-                <img id="picture" src="../static/images/img_1.jpg" class="ui fluid rounded image">
+                <img id="picture" src="" class="ui fluid rounded image">
             </div>
 
             <div class="ui  attached padded segment" id="blogCenter">
@@ -305,7 +304,6 @@
                 $("#views").append(result.data.views);
 
                 document.title =   result.data.title;
-
 
                 $("#picture").attr("src",result.data.picture) ;
 

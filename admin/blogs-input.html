@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>博客发布</title>
     <link rel="stylesheet" href="../static/lib/semantic-ui2.4.1/semantic.min.css">
-    <link rel="stylesheet" href="../static/lib/editormd/css/editormd.min.css">
     <link rel="stylesheet" href="../static/css/myStyle.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@latest/dist/index.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.15.6/styles/atom-one-light.min.css" />
     <script src="../static/lib/jquery3.4.1/jquery.min.js"></script>
+    <script src="../static/lib/Vditor/index.min.js"></script>
+
     <script src="../static/js/admin/checkLogin.js"></script>
-    <script src="../static/lib/editormd/editormd.min.js"></script>
 </head>
 <body>
     <!--导航-->
@@ -48,7 +49,7 @@
 
                 <div class="field">
                     <div  id="md-content" style="z-index: 1 !important;">
-                        <textarea  id="md_content_value" placeholder="博客内容" style="display: none"></textarea>
+                        <div id="vditor"></div>
                     </div>
                 </div>
 
@@ -127,42 +128,71 @@
     <script src="../static/js/commonJS.js"></script>
 
 
-    <script src="../static/lib/editormd/plugins/image-handle-paste/image-handle-paste.js"></script>
     <script>
     //初始化markdown编译器
-    var contentEditor;
     var blogId = null;
     var tagList = null;
     $(function() {
-
         blogId =sessionStorage.getItem("blogId");
-        contentEditor = editormd("md-content", {
-            width   : "100%",
-            height  : 640,
-            syncScrolling : "single",
-            path    : "../static/lib/editormd/lib/",
+        const vditor = new Vditor('vditor', {
+            //工具栏
+            toolbar: ["emoji" , "headings" , "bold" , "italic" , "strike" , "line" , "quote" , "list" , "ordered-list"
+                , "code" , "inline-code" , "undo" , "redo" , "upload" , "link" , "table" , "edit-mode","preview" , "fullscreen"],
+            typewriterMode: true,
+            placeholder: 'placeholder',
+            counter: 10000,
+            height: 500,
+            hljs: {
+                enable: true,
+                style: "monokai",
+            },
+            hint: {
+                emojiPath: 'https://cdn.jsdelivr.net/npm/vditor@1.8.3/dist/images/emoji',
+                emoji: {
+                    pray: '🙏',
+                    broken_heart: '💔',
+                    ok_hand: '👌',
+                    smile: '😄',
+                    laughing: '😆',
+                    smirk: '😏',
+                    heart_eyes: '😍',
+                    grin: '😁',
+                    stuck_out_tongue: '😛',
+                    expressionless: '😑',
+                    unamused: '😒',
+                    sob: '😭',
+                    joy: '😂',
+                    tired_face: '😫',
+                    blush: '😊',
+                    cry: '😢',
+                    fearful: '😨'
+                },
+            },
+            tab: '\t',
+            upload: {
+                accept: 'image/*',
+                withCredentials:true,
+                url: myhost+'/blog/file/upload/img2',
+                success(editor,data){ //上传成功回显
+                    data = JSON.parse(data); //将json字符串转换成json
+                    let img_text = '';
+                    for (let i = 0; i < data.data.length; i++) {
+                        img_text += `\n![](${data.data[i]})\n`;
+                    }
+                    var innerHTML = editor.innerHTML;
+                    editor.innerHTML = innerHTML+img_text;
+                },
+                filename (name) {
+                    return name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').
+                    replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').
+                    replace('/\\s/g', '')
+                },
+            },
+        })
 
-            saveHTMLToTextarea : true, // 保存 HTML 到 Textarea
-            searchReplace : true,
-            codeFold : true,
 
-            //上传图片
-            imageUpload: true,
-            imageFormats : [ "jpg", "jpeg", "gif", "png", "bmp", "webp" ],
-            imageUploadURL : myhost +"/blog/file/upload/img",//后端图片上传的服务地址
-            crossDomainUpload : true,
-            uploadCallbackURL : "http://localhost:63343/MyBlog/admin/blogs-input.html",//上传成功后跳转的地址
-
-            onload: function() {
-                // 引入图片复制插件 执行监听方法
-                contentEditor.imagePaste();
-            }
-        });
-
-
+        //文章回显
         if(blogId != null){
-
-
             var tagDef = document.createElement("div");
             tagDef.setAttribute("class","default text");
             $("#tagshow").append(tagDef);
@@ -170,6 +200,7 @@
             sessionStorage.setItem("updatId",blogId);
             InitBlogContent();
         }else{
+            //编写文章
             var typeDef = document.createElement("div");
             typeDef.setAttribute("class","default text");
             typeDef.append("分类");
@@ -183,7 +214,6 @@
             InitTypeMenu(null);
             InitTagMenu(null);
         }
-
 
         $('#save-btn').click(function () {
             var boo = $('.ui.form').form('validate form');
@@ -203,6 +233,117 @@
             }
 
         });
+
+
+        function InitBlogContent(){
+            $.ajax({
+                url: myhost + "/blog/article/"+blogId,
+                type: "GET",
+                crossDomain: true,
+                contentType: "application/json",
+                dataType: "json",
+                headers : {'Authorization':token},
+                async:false,
+                success: function (result) {
+                    console.log(result)
+                    var info = result.data;
+                    tagList = info.tags;
+                    if(info.copyRight){  //发布
+                        document.getElementById("copyRightStatus").setAttribute("valuse","1");
+                    }else {//保存
+                        document.getElementById("copyRightStatus").setAttribute("valuse","2");
+                    }
+                    $("#title").val(info.title);
+
+                    vditor.setValue(info.content);
+
+                    document.getElementById("typeValue").setAttribute("value",info.typeId);
+                    // $("#typeValue").value = info.typeId;
+                    InitTypeMenu(info.typeId);
+                    InitTagMenu(info.tags);
+
+
+                    var typeText = document.createElement("div");
+                    typeText.setAttribute("class","text");
+
+                    $("#md_content_value").empty();
+
+                    document.getElementById("recommend").setAttribute("checked","true");
+                    document.getElementById("appreciation").setAttribute("checked","true");
+                    document.getElementById("comment").setAttribute("checked","true");
+
+                    $("#publish-btn").empty();
+                    document.getElementById("publish-btn").append("修改");
+
+                }
+            })
+        }
+
+        function postBlog(input){
+            var articleId = sessionStorage.getItem("updatId");
+            var status;
+            if(input ==1){  //发布
+                status = new Boolean(1);
+            }else {//保存
+                status = new Boolean(0);
+            }
+            var title = $('#title').val();
+            var inputCopyRight = document.getElementById("copyRightStatus").getAttribute("value");
+            if (inputCopyRight == 1){
+                var copyRight = new Boolean(1);
+            }else{
+                var copyRight = new Boolean(0);
+            }
+
+            var type = document.getElementById("typeValue").getAttribute("value");
+
+            var tag = document.getElementById("tagValue").getAttribute("value");
+            var tags = tag.split(",");
+
+            var content = vditor.getValue();
+
+            var recommend = document.getElementById("recommend").checked;
+            var appreciation = document.getElementById("appreciation").checked;
+            var comment = document.getElementById("comment").checked;
+
+
+            var method ;
+            if(blogId != null){
+                method = "PUT";
+            }else{
+                method = "POST";
+            }
+            console.log(type);
+            $.ajax({
+                url: myhost + "/blog/article",
+                type: method,
+                crossDomain: true,
+                contentType: "application/json",
+                dataType: "json",
+                headers : {'Authorization':token},
+                data: JSON.stringify({
+                    "id":articleId,
+                    "title":title,
+                    "summary":null,
+                    "userId":user[0],
+                    "typeId":type,
+                    "tags":tags,
+                    "copyRight":copyRight,
+                    "recommend":recommend,
+                    "commentabled":comment,
+                    "appreciation":appreciation,
+                    "status":status,
+                    "content":content
+                }),
+                success:function (result) {
+                    alert("成功");
+                    window.location.href = "blogs.html";
+                },
+                error:function (error) {
+                    alert(error.responseText[2]);
+                }
+            });
+        }
 
     });
 
@@ -260,9 +401,7 @@
                 "size": 10,
                 "page": 1,
             }),
-            // <div class="item" data-value="1">java</div>
             success: function (result) {
-
                 $.each(result.data,function (index,item) {
                     var div = document.createElement("div");
                     if(typeId != null && typeId == item.id){
@@ -279,120 +418,6 @@
             }
         })
     }
-
-
-    function postBlog(input){
-        var articleId = sessionStorage.getItem("updatId");
-        var status;
-        if(input ==1){  //发布
-            status = new Boolean(1);
-        }else {//保存
-            status = new Boolean(0);
-        }
-        var title = $('#title').val();
-        var inputCopyRight = document.getElementById("copyRightStatus").getAttribute("value");
-        if (inputCopyRight == 1){
-            var copyRight = new Boolean(1);
-        }else{
-            var copyRight = new Boolean(0);
-        }
-
-        var type = document.getElementById("typeValue").getAttribute("value");
-
-
-        var tag = document.getElementById("tagValue").getAttribute("value");
-        var tags = tag.split(",");
-
-        var content = contentEditor.getMarkdown();
-
-        var recommend = document.getElementById("recommend").checked;
-        var appreciation = document.getElementById("appreciation").checked;
-        var comment = document.getElementById("comment").checked;
-
-
-        var method ;
-        if(blogId != null){
-            method = "PUT";
-        }else{
-            method = "POST";
-        }
-        $.ajax({
-            url: myhost + "/blog/article",
-            type: method,
-            crossDomain: true,
-            contentType: "application/json",
-            dataType: "json",
-            headers : {'Authorization':token},
-            data: JSON.stringify({
-                "id":articleId,
-                "title":title,
-                "summary":null,
-                "userId":user[0],
-                "typeId":type,
-                "tags":tags,
-                "copyRight":copyRight,
-                "recommend":recommend,
-                "commentabled":comment,
-                "appreciation":appreciation,
-                "status":status,
-                "content":content
-            }),
-            success:function (result) {
-                alert("成功");
-                window.location.href = "blogs.html";
-            },
-            error:function (error) {
-                alert(error.responseText[2]);
-            }
-        });
-    }
-
-
-
-    function InitBlogContent(){
-        $.ajax({
-            url: myhost + "/blog/article/"+blogId,
-            type: "GET",
-            crossDomain: true,
-            contentType: "application/json",
-            dataType: "json",
-            headers : {'Authorization':token},
-            async:false,
-            success: function (result) {
-                var info = result.data;
-                tagList = info.tags;
-                if(info.copyRight){  //发布
-                    document.getElementById("copyRightStatus").setAttribute("valuse","1");
-                }else {//保存
-                    document.getElementById("copyRightStatus").setAttribute("valuse","2");
-                }
-                $("#title").val(info.title);
-
-                document.getElementById("typeValue").setAttribute("value",info.typeId);
-                // $("#typeValue").value = info.typeId;
-                InitTypeMenu(info.typeId);
-                InitTagMenu(info.tags);
-
-
-                var typeText = document.createElement("div");
-                typeText.setAttribute("class","text");
-
-                $("#md_content_value").empty();
-
-                document.getElementById("md_content_value").append(info.content);
-                // contentEditor.setMarkdown(info.content);
-
-                document.getElementById("recommend").setAttribute("checked","true");
-                document.getElementById("appreciation").setAttribute("checked","true");
-                document.getElementById("comment").setAttribute("checked","true");
-
-                $("#publish-btn").empty();
-                document.getElementById("publish-btn").append("修改");
-
-            }
-        })
-    }
-
 
     $('.ui.dropdown').dropdown({
         on : 'hover'

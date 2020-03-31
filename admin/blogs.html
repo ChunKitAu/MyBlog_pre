@@ -102,7 +102,6 @@
             InitSearchType();
 
             $("#toPrePageBtn").click(function () {
-                alert(currentPage);
                 if(currentPage > 1){
                     currentPage --;
                     $("#table_boby").empty();
@@ -111,7 +110,6 @@
             })
 
             $("#toNextPageBtn").click(function () {
-                alert(totalPgae)
                 if(currentPage < totalPgae){
                     currentPage ++;
                     $("#table_boby").empty();

@@ -172,13 +172,10 @@
             upload: {
                 accept: 'image/*',
                 withCredentials:true,
-                url: myhost+'/blog/file/upload/img2',
+                url: myhost+'/blog/file/upload/img',
                 success(editor,data){ //上传成功回显
                     data = JSON.parse(data); //将json字符串转换成json
-                    let img_text = '';
-                    for (let i = 0; i < data.data.length; i++) {
-                        img_text += `\n![](${data.data[i]})\n`;
-                    }
+                    let img_text = `\n![](${data.data})\n`;
                     var innerHTML = editor.innerHTML;
                     editor.innerHTML = innerHTML+img_text;
                 },
@@ -245,7 +242,6 @@
                 headers : {'Authorization':token},
                 async:false,
                 success: function (result) {
-                    console.log(result)
                     var info = result.data;
                     tagList = info.tags;
                     if(info.copyRight){  //发布
@@ -313,7 +309,6 @@
             }else{
                 method = "POST";
             }
-            console.log(type);
             $.ajax({
                 url: myhost + "/blog/article",
                 type: method,

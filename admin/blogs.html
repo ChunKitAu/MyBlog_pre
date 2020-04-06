@@ -11,52 +11,53 @@
     <script src="../static/js/admin/checkLogin.js"></script>
 </head>
 <body>
-    <!--导航-->
-    <nav id="header">
-        <script src="../static/js/admin/header.js"></script>
-    </nav>
-    <div class="ui attached pointing menu">
-        <div class="ui container">
-            <div class="right menu">
-                <a href="blogs-input.html" class="item">发布</a>
-                <a href="blogs.html" class="teal item active">列表</a>
+    <div id="container">
+        <!--导航-->
+        <nav id="header">
+            <script src="../static/js/admin/header.js"></script>
+        </nav>
+        <div class="ui attached pointing menu">
+            <div class="ui container">
+                <div class="right menu">
+                    <a href="blogs-input.html" class="item">发布</a>
+                    <a href="blogs.html" class="teal item active">列表</a>
+                </div>
             </div>
         </div>
-    </div>
-    <!--中间内容-->
-    <div class="m-container-small m-padded-tb-big">
-        <div class="ui container">
-            <form action="#" method="post" class="ui segment form">
-                <div class="inline fields">
-                    <div class="field">
-                        <input id="searchTitle" type="text" name="title" placeholder="标题">
-                    </div>
-                    <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="type" id="searchTypeMenuValue">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">分类</div>
-                            <div class="menu" id="searchTypeMenu">
+        <!--中间内容-->
+        <div class="m-container-small m-padded-tb-big">
+            <div class="ui container">
+                <form action="#" method="post" class="ui segment form">
+                    <div class="inline fields">
+                        <div class="field">
+                            <input id="searchTitle" type="text" name="title" placeholder="标题">
+                        </div>
+                        <div class="field">
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="type" id="searchTypeMenuValue">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">分类</div>
+                                <div class="menu" id="searchTypeMenu">
 
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            <input type="checkbox" id="searchRecommend" name="searchRecommend">
-                            <label for="searchRecommend">推荐</label>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" id="searchRecommend" name="searchRecommend">
+                                <label for="searchRecommend">推荐</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <a id="searchBtn" class="ui teal basic button" onclick="Search()"><i class="search icon"></i>搜索</a>
+                            <a class="ui teal basic button" onclick="window.location.reload()"><i class="search icon"></i>重置</a>
                         </div>
                     </div>
-                    <div class="field">
-                        <a id="searchBtn" class="ui teal basic button" onclick="Search()"><i class="search icon"></i>搜索</a>
-                        <a class="ui teal basic button" onclick="window.location.reload()"><i class="search icon"></i>重置</a>
-                    </div>
-                </div>
-            </form>
+                </form>
 
-            <table class="ui selectable  table">
-                <thead>
+                <table class="ui selectable  table">
+                    <thead>
                     <tr>
                         <th></th>
                         <th>标题</th>
@@ -64,235 +65,31 @@
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
-                </thead>
-                <tbody id="table_boby">
+                    </thead>
+                    <tbody id="table_boby">
 
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="6">
-                            <div class="ui minizzz pagination menu">
-                                <a class="item" id="toPrePageBtn">上一页</a>
-                                <a class="item" id="toNextPageBtn">下一页</a>
-                            </div>
-                        </th>
-                    </tr>
-                </tfoot>
-            </table>
+                    </tbody>
+                    <tfoot>
+                    <tr><th colspan="5">
+                        <div id="tfoot" class="ui right floated pagination menu">
+                        </div>
+                    </th>
+                    </tr></tfoot>
+                </table>
 
+            </div>
+        </div>
+
+        <br><br>
+        <!--底部footer-->
+        <div id="footer">
+            <script>
+                $("#footer").load("admin_template.html #footer");
+            </script>
         </div>
     </div>
-
-
-    <!--底部footer-->
-    <footer id="footer">
-        <script>
-            $("#footer").load("admin_template.html #footer");
-        </script>
-    </footer>
-
-
-    <script src="../static/lib/semantic-ui2.4.1/semantic.min.js"></script>
-
-    <script src="../static/js/commonJS.js"></script>
-    <script>
-        var totalPgae = 0,currentPage = 1;
-        $(function () {
-            initTable();
-            InitSearchType();
-
-            $("#toPrePageBtn").click(function () {
-                if(currentPage > 1){
-                    currentPage --;
-                    $("#table_boby").empty();
-                    initTable();
-                }
-            })
-
-            $("#toNextPageBtn").click(function () {
-                if(currentPage < totalPgae){
-                    currentPage ++;
-                    $("#table_boby").empty();
-                    initTable();
-                }
-            })
-
-        })
-
-        function initTable() {
-            $.ajax({
-                url: myhost + "/blog/article/list",
-                type: "GET",
-                crossDomain: true,
-                contentType: "application/json",
-                dataType: "json",
-                data: {
-                    "size": 10,
-                    "page": currentPage,
-                },
-                success: function (result) {
-                    var table = document.getElementById("table_boby");
-                    totalPgae = result.data[0].totalPgae;
-                    $.each(result.data,function (index,item) {
-                        var tr = document.createElement("tr");
-                        var indexTd = document.createElement("td");
-                        indexTd.append(index+1);
-
-                        var titleTd = document.createElement("td");
-                        titleTd.append(item.title);
-
-                        var createTimeTd = document.createElement("td");
-                        createTimeTd.append(item.createTime);
-
-                        var statusTd = document.createElement("td");
-                        if(item.status == 1){
-                            statusTd.append("发布");
-                        }else{
-                            statusTd.append("保存");
-                        }
-
-                        var doTd = document.createElement("td");
-                        var editBtn = document.createElement("a");
-                        editBtn.setAttribute("class","ui mini teal basic button");
-                        editBtn.href = "#";
-                        editBtn.innerText = "编辑";
-                        editBtn.setAttribute("onclick","toBlogInput("+item.id+")")
-                        var delBtn = document.createElement("a");
-                        delBtn.setAttribute("class","ui mini red basic button");
-                        delBtn.href = "#";
-                        delBtn.innerText = "删除";
-                        delBtn.setAttribute("onclick","deleteBlog("+item.id+")")
-                        doTd.append(editBtn);
-                        doTd.append(delBtn);
-
-                        tr.append(indexTd);
-                        tr.append(titleTd);
-                        tr.append(createTimeTd);
-                        tr.append(statusTd);
-                        tr.append(doTd);
-
-
-                        table.append(tr);
-                    })
-                }
-            })
-        }
-        function InitSearchType(){
-            $.ajax({
-                url: myhost + "/blog/type/list",
-                type: "GET",
-                crossDomain: true,
-                contentType: "application/json",
-                dataType: "json",
-                data: {
-                    "size": 20,
-                    "page": 1,
-                },
-                success: function (result) {
-                    $.each(result.data,function (index,item) {
-                        var div = document.createElement("div");
-                        div.setAttribute("class","item");
-                        div.setAttribute("data-value",item.id);
-                        div.append(item.name);
-                        $("#searchTypeMenu").append(div);
-                    })
-                }
-            })
-        }
-
-
-        function toBlogInput(blogId) {
-            sessionStorage.setItem("blogId",blogId);
-            window.location.href = "blogs-input.html"
-        }
-        function deleteBlog(blogId) {
-            if(blogId == null)
-                return ;
-            if(confirm("确认删除？")){
-                $.ajax({
-                    url: myhost + "/blog/article/"+blogId,
-                    dataType: "JSON",
-                    type: "DELETE",
-                    contentType: "application/json;charset-UTF-8",
-                    crossDomain: true,
-                    headers : {'Authorization':token},
-                    success: function (result) {
-                        if(result.status == 200){
-                            alert("删除成功！");
-                            window.location.reload();
-                        }
-                    }
-                })
-            }
-        }
-
-        function Search() {
-            var title = $("#searchTitle").val();
-            var type = document.getElementById("searchTypeMenuValue").getAttribute("value");
-            var recommend = document.getElementById("searchRecommend").checked;
-            $.ajax({
-                url: myhost + "/blog/article/admin/like",
-                dataType: "JSON",
-                type: "GET",
-                contentType: "application/json;charset-UTF-8",
-                crossDomain: true,
-                headers : {'Authorization':token},
-                data: {
-                  title : title,
-                    recommend : recommend,
-                    typeId : type
-                },
-                success: function (result) {
-                    if(result.status == 200){
-                        $("#table_boby").empty();
-                        var table = document.getElementById("table_boby");
-                        $.each(result.data,function (index,item) {
-                            var tr = document.createElement("tr");
-                            var indexTd = document.createElement("td");
-                            indexTd.append(index+1);
-
-                            var titleTd = document.createElement("td");
-                            titleTd.append(item.title);
-
-                            var createTimeTd = document.createElement("td");
-                            createTimeTd.append(item.createTime);
-
-                            var statusTd = document.createElement("td");
-                            if(item.status == true){
-                                statusTd.append("发布");
-                            }else{
-                                statusTd.append("保存");
-                            }
-
-                            var doTd = document.createElement("td");
-                            var editBtn = document.createElement("a");
-                            editBtn.setAttribute("class","ui mini teal basic button");
-                            editBtn.href = "#";
-                            editBtn.innerText = "编辑";
-                            editBtn.setAttribute("onclick","toBlogInput("+item.id+")")
-                            var delBtn = document.createElement("a");
-                            delBtn.setAttribute("class","ui mini red basic button");
-                            delBtn.href = "#";
-                            delBtn.innerText = "删除";
-                            delBtn.setAttribute("onclick","deleteBlog("+item.id+")")
-                            doTd.append(editBtn);
-                            doTd.append(delBtn);
-
-                            tr.append(indexTd);
-                            tr.append(titleTd);
-                            tr.append(createTimeTd);
-                            tr.append(statusTd);
-                            tr.append(doTd);
-
-
-                            table.append(tr);
-                        })
-
-                    }
-                }
-            })
-        }
-
-    </script>
 </body>
+<script src="../static/lib/semantic-ui2.4.1/semantic.min.js"></script>
+<script src="../static/js/commonJS.js"></script>
+<script src="../static/js/admin/blogs-js.js"></script>
 </html>

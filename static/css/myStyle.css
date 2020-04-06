@@ -177,6 +177,20 @@ body {
 }
 
 
+#container {
+    min-height:100% !important;
+    height: auto !important;
+    position: relative !important;
+}
+/*-----页脚----*/
+
+footer{
+    position: absolute !important;
+    left: 0 !important;
+    width: 100% !important;
+    bottom: 0 !important;
+}
+
 /*-----container*/
 
 .m-container {

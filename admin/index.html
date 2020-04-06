@@ -11,36 +11,40 @@
     <script src="../static/js/admin/checkLogin.js"></script>
 </head>
 <body>
-<!--导航-->
-<nav id="header">
-    <script src="../static/js/admin/header.js"></script>
-</nav>
-<div class="ui attached pointing menu">
-    <div class="ui container">
-        <div class="right menu">
-            <a href="blogs-input.html" class="item">发布</a>
-            <a href="blogs.html" class="teal item active">列表</a>
+
+<div id="container">
+    <!--导航-->
+    <nav id="header">
+        <script src="../static/js/admin/header.js"></script>
+    </nav>
+    <div class="ui attached pointing menu">
+        <div class="ui container">
+            <div class="right menu">
+                <a href="blogs-input.html" class="item">发布</a>
+                <a href="blogs.html" class="teal item active">列表</a>
+            </div>
         </div>
     </div>
-</div>
 
-<!--中间内容-->
-<div class="m-container-small m-padded-tb-big">
-    <div class="ui container">
-        <div class="ui message success large">
-            <h2>Hello</h2>
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+        <div class="ui container">
+            <div class="ui message success large">
+                <h2>Hello</h2>
+            </div>
+            <!--        <img src="../static/images/img_3.jpg" alt="" class="ui avatar image">-->
         </div>
-<!--        <img src="../static/images/img_3.jpg" alt="" class="ui avatar image">-->
     </div>
-</div>
-<br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br>
 
-<!--底部footer-->
-<footer id="footer">
-    <script>
-    $("#footer").load("admin_template.html #footer");
-    </script>
-</footer>
+    <!--底部footer-->
+    <footer id="footer">
+        <script>
+            $("#footer").load("admin_template.html #footer");
+        </script>
+    </footer>
+</div>
+
 <script src="../static/lib/semantic-ui2.4.1/semantic.min.js"></script>
 <script src="../static/js/commonJS.js"></script>
 </body>

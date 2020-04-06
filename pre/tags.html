@@ -10,147 +10,59 @@
     <script src="../static/lib/jquery3.4.1/jquery.min.js"></script>
 </head>
 <body>
-    <!--导航-->
-    <nav id="header">
-        <script src="../static/js/pre/header.js"></script>
-    </nav>
-    <!--中间内容-->
-    <div class="m-container-small m-padded-tb-big">
-        <div class="ui container">
-            <!--header-->
-            <div class="ui top attached segment">
-                <div class="ui middle aligned two column grid">
-                    <div class="column">
-                        <h3 class="ui teal header">标签</h3>
-                    </div>
-                    <div class="right aligned column">
-<!--                        共 <h3 class="ui orange header m-inline-block m-text-thin">14</h3> 篇-->
+    <div id="container">
+        <!--导航-->
+        <nav id="header">
+            <script src="../static/js/pre/header.js"></script>
+        </nav>
+        <!--中间内容-->
+        <div class="m-container-small m-padded-tb-big">
+            <div class="ui container">
+                <!--header-->
+                <div class="ui top attached segment">
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <h3 class="ui teal header">标签</h3>
+                        </div>
+                        <div class="right aligned column">
+                            <!--                        共 <h3 class="ui orange header m-inline-block m-text-thin">14</h3> 篇-->
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="tags" class="ui attached segment m-padded-tb-large">
-                <!--标签-->
-            </div>
+                <div id="tags" class="ui attached segment m-padded-tb-large">
+                    <!--标签-->
+                </div>
 
-            <div class="ui top attached teal segment" id="tagBlog">
-                <!--文章-->
-            </div>
-            <!--bottom-->
-            <div id="bottmText" class="ui bottom attached  segment" style="display: none">
-                <div class="ui middle aligned two column grid">
-                    <div class="column">
-                    </div>
-                    <div class="right aligned column">
-                        <a class="ui mini orange header ">没有啦....</a>
+                <div class="ui top attached teal segment" id="tagBlog">
+                    <!--文章-->
+                </div>
+                <!--bottom-->
+                <div id="bottmText" class="ui bottom attached  segment" style="display: none">
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                        </div>
+                        <div class="right aligned column">
+                            <a class="ui mini orange header ">没有啦....</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <br><br>
+        <!--底部footer-->
+        <footer id="footer">
+            <script>
+                $("#footer").load("template.html #footer");
+            </script>
+        </footer>
     </div>
 
-
-    <!--底部footer-->
-    <footer id="footer">
-        <script>
-            $("#footer").load("template.html #footer");
-        </script>
-    </footer>
-
-
-    <script src="../static/lib/semantic-ui2.4.1/semantic.min.js"></script>
-    <script src="../static/js/commonJS.js"></script>
-    <script src="../static/js/pre/initBlog.js"></script>
-    <script src="../static/js/pre/toHref.js"></script>
-    <script src="../static/js/pre/header.js"></script>
-    <script>
-        var tagId;
-        var pageno =1;
-        $(function () {
-            tagId = sessionStorage.getItem("tagId");
-            if(tagId != null)
-                sessionStorage.removeItem("tagId");
-            InitTagHeader();
-            InitTagBolg();
-            $(window).scroll(function() {
-                var scrollTop = $(this).scrollTop(),scrollHeight = $(document).height(),windowHeight = $(this).height();
-                var positionValue = (scrollTop + windowHeight) - scrollHeight;
-                if (positionValue >= -C) {
-                    if (pageno <=  totalPages ) {
-                        pageno++;
-                        InitTagBolg(pageno);
-                    } else {
-                        $("#bottmText").show();
-                    }
-                }
-            });
-        })
-
-        function InitTagHeader() {
-            $.ajax({
-                url:myhost+"/blog/tag/list",
-                type: "GET",
-                crossDomain: true,
-                contentType : "application/json",
-                dataType:"json",
-                async:false,
-                data: {
-                    "page": 1,
-                    "size": 100
-                },
-                // <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-thiny">
-                // 学习方法
-                // <div class="detail">12</div>
-                // </a>
-                success: function (result) {
-                    $('#tags').empty();
-                    var contents = result.data;
-
-                    if(tagId == null)
-                        tagId = result.data[0].id;
-                    $.each(contents,function (index,item) {
-                        if(item.num != 0){
-                            var a = document.createElement("a");
-                            a.setAttribute("onclick","toTagHref("+item.id+")");
-                            a.append(item.name);
-                            var div = document.createElement("div");
-                            if(tagId != null && tagId == item.id){
-                                a.setAttribute("class","ui teal basic  left pointing large label m-margin-tb-thiny");
-                                div.setAttribute("class"," teal detail");
-                            }else {
-                                a.setAttribute("class","ui basic left pointing large label m-margin-tb-thiny");
-                                div.setAttribute("class","detail");
-                            }
-                            div.append(item.num);
-                            a.appendChild(div);
-                            $('#tags').append(a);
-                        }
-                    })
-                },
-                error: function (result) {
-                }
-            })
-        }
-
-
-        function InitTagBolg() {
-            $.ajax({
-                url: myhost + "/blog/article/tag/list/"+tagId,
-                type: "GET",
-                crossDomain: true,
-                contentType: "application/json",
-                dataType: "json",
-                data: {
-                    "page": pageno,
-                    "size": 10
-                },
-                success: function (result) {
-                    totalPages = result.data[0].totalPgae;
-                    Blog("tagBlog",result.data);
-                }
-            });
-
-        }
-
-    </script>
 </body>
+<script src="../static/lib/semantic-ui2.4.1/semantic.min.js"></script>
+<script src="../static/js/commonJS.js"></script>
+<script src="../static/js/pre/initBlog.js"></script>
+<script src="../static/js/pre/toHref.js"></script>
+<script src="../static/js/pre/header.js"></script>
+<script src="../static/js/pre/tags-js.js"></script>
 </html>

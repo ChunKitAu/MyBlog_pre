@@ -6,7 +6,6 @@
     <title>详情页</title>
     <link rel="stylesheet" href="../static/lib/semantic-ui2.4.1/semantic.min.css">
     <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css">
-    <link rel="stylesheet" href="../static/css/animate.css">
     <link rel="stylesheet" href="../static/css/myStyle.css">
     <link rel="stylesheet" href="../static/lib/highLights/atom-one-dark.css">
 
@@ -15,402 +14,163 @@
 </head>
 <body>
 
-    <!--导航-->
-    <div id="header">
-        <script src="../static/js/pre/header.js"></script>
-    </div>
-    <!--中间内容-->
-    <div  class="m-container-small m-margin-top-small animated fadeIn">
-        <div class="ui container">
-            <div class="ui top attached segment">
-                <div class="ui  horizontal link list">
-                    <div class="item">
-                        <img id="avater" src="https://picsum.photos/id/1002/100/100" alt="" class="ui avatar image">
-                        <div class="content">
-                            <a id="userName" class="header" href="#"></a>
-                        </div>
-                    </div>
-                    <div class="item" id="dates">
-                        <i  class="calendar icon"></i>
-                    </div>
-                    <div class="item" id="views">
-                        <i class="eye icon"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="ui  attached segment">
-                <!--图片区域-->
-                <img id="picture" src="" class="ui fluid rounded image">
-            </div>
-
-            <div class="ui  attached padded segment" id="blogCenter">
-                <!--内容-->
-                <div class="ui right aligned basic segment ">
-                    <div id="copyRight" class="ui orange basic label"></div>
-                </div>
-
-                <h2 id="title" class="ui center aligned header"></h2>
-                <br>
-
-                <div id="content" class="js-toc-content  m-padded-lr-responsive m-padded-tb-large">
-
-                </div>
-
-                <!--标签-->
-                <div class="m-padded-lr-responsive" id="tags">
-
-                </div>
-                <!--赞赏-->
-                <div class="ui center aligned basic segment" style="display: none" id="appreciate">
-                    <button id="payButton" class="ui basic orange circular button">赞赏</button>
-                </div>
-                <div class="ui payQR flowing popup top left transition hidden">
-                    <div class="ui orange basic label">
-                        <div class="ui images" style="font-size: inherit !important;">
-                            <div class="image">
-                                <img src="../static/images/bg.png" alt="" class="ui rounded bordered image" style="width: 120px">
-                                <div>支付宝</div>
-                            </div>
-                            <div class="image">
-                                <img src="../static/images/bg.png" alt="" class="ui rounded bordered image " style="width: 120px">
-                                <div>微信</div>
+    <div id="container">
+        <!--导航-->
+        <div id="header">
+            <script src="../static/js/pre/header.js"></script>
+        </div>
+        <!--中间内容-->
+        <div  class="m-container-small m-margin-top-small animated fadeIn">
+            <div class="ui container">
+                <div class="ui top attached segment">
+                    <div class="ui  horizontal link list">
+                        <div class="item">
+                            <img id="avater" src="https://picsum.photos/id/1002/100/100" alt="" class="ui avatar image">
+                            <div class="content">
+                                <a id="userName" class="header" href="#"></a>
                             </div>
                         </div>
+                        <div class="item" id="dates">
+                            <i  class="calendar icon"></i>
+                        </div>
+                        <div class="item" id="views">
+                            <i class="eye icon"></i>
+                        </div>
                     </div>
                 </div>
-
-
-                <div id="waypoint_toc" class="right ui rail" style="display: none">
-                    <div  class="ui sticky js-toc" >
-                    </div>
+                <div class="ui  attached segment">
+                    <!--图片区域-->
+                    <img id="picture" src="" class="ui fluid rounded image">
                 </div>
 
+                <div class="ui  attached padded segment" id="blogCenter">
+                    <!--内容-->
+                    <div class="ui right aligned basic segment ">
+                        <div id="copyRight" class="ui orange basic label"></div>
+                    </div>
 
-            </div>
-            <div class="ui  attached positive message">
-                <!--博客信息-->
-                <div class="ui middle aligned grid">
-                    <div class="eleven wide column">
-                        <ul class="list">
-                            <li id="auth_master">作者:</li>
-                            <li id="auth_createtime">发表时间:</li>
-                            <li>版权声明</li>
-                            <li>公众号转载</li>
-                        </ul>
-                    </div>
-                    <div class="five wide column">
-                        <img src="../static/images/wechat.png" alt="" class="ui right floated rounded bordered image" style="width: 110px">
-                    </div>
-                </div>
-            </div>
+                    <h2 id="title" class="ui center aligned header"></h2>
+                    <br>
 
+                    <div id="content" class="js-toc-content  m-padded-lr-responsive m-padded-tb-large">
 
-            <div id="comment-container" class="ui bottom attached segment" style="display: none">
-                <!--留言区域-->
-                <div class="ui teal segment">
-                    <div class="ui comments" id="commentDiv">
-                        <h3 class="ui dividing header">Comments</h3>
-                        <!--评论主体-->
                     </div>
-                </div>
-                <div class="ui form segment">
-                    <h4 class="ui header teal" id="parnetName"></h4>
-                    <div class="field">
-                        <textarea id="commend" name="commend" placeholder="请输入评论信息"></textarea>
+
+                    <!--标签-->
+                    <div class="m-padded-lr-responsive" id="tags">
+
                     </div>
-                    <div class="fields">
-                        <div class="field m-mobile-wide m-margin-bottom-small">
-                            <div class="ui left icon input">
-                                <i class="user icon"></i>
-                                <input type="text" name="nickname" id="nickname" placeholder="姓名">
+                    <!--赞赏-->
+                    <div class="ui center aligned basic segment" style="display: none" id="appreciate">
+                        <button id="payButton" class="ui basic orange circular button">赞赏</button>
+                    </div>
+                    <div class="ui payQR flowing popup top left transition hidden">
+                        <div class="ui orange basic label">
+                            <div class="ui images" style="font-size: inherit !important;">
+                                <div class="image">
+                                    <img src="../static/images/bg.png" alt="" class="ui rounded bordered image" style="width: 120px">
+                                    <div>支付宝</div>
+                                </div>
+                                <div class="image">
+                                    <img src="../static/images/bg.png" alt="" class="ui rounded bordered image " style="width: 120px">
+                                    <div>微信</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="field m-mobile-wide m-margin-bottom-small">
-                            <div class="ui left icon input">
-                                <i class="mail icon"></i>
-                                <input type="text" name="email" id="email" placeholder="邮箱">
+                    </div>
+
+
+                    <div id="waypoint_toc" class="right ui rail" style="display: none">
+                        <div  class="ui sticky js-toc" >
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="ui  attached positive message">
+                    <!--博客信息-->
+                    <div class="ui middle aligned grid">
+                        <div class="eleven wide column">
+                            <ul class="list">
+                                <li id="auth_master">作者:</li>
+                                <li id="auth_createtime">发表时间:</li>
+                                <li>版权声明</li>
+                                <li>公众号转载</li>
+                            </ul>
+                        </div>
+                        <div class="five wide column">
+                            <img src="../static/images/wechat.png" alt="" class="ui right floated rounded bordered image" style="width: 110px">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="comment-container" class="ui bottom attached segment" style="display: none">
+                    <!--留言区域-->
+                    <div class="ui teal segment">
+                        <div class="ui comments" id="commentDiv">
+                            <h3 class="ui dividing header">Comments</h3>
+                            <!--评论主体-->
+                        </div>
+                    </div>
+                    <div class="ui form segment">
+                        <h4 class="ui header teal" id="parnetName"></h4>
+                        <div class="field">
+                            <textarea id="commend" name="commend" placeholder="请输入评论信息"></textarea>
+                        </div>
+                        <div class="fields">
+                            <div class="field m-mobile-wide m-margin-bottom-small">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="nickname" id="nickname" placeholder="姓名">
+                                </div>
                             </div>
+                            <div class="field m-mobile-wide m-margin-bottom-small">
+                                <div class="ui left icon input">
+                                    <i class="mail icon"></i>
+                                    <input type="text" name="email" id="email" placeholder="邮箱">
+                                </div>
+                            </div>
+                            <div class="field m-mobile-wide m-margin-bottom-small">
+                                <buttom id="commentpost-btn" class="ui  teal  submit button"><i class="edit icon"></i>提交</buttom>
+                            </div>
+                            <div class="ui error message"></div>
                         </div>
-                        <div class="field m-mobile-wide m-margin-bottom-small">
-                            <buttom id="commentpost-btn" class="ui  teal  submit button"><i class="edit icon"></i>提交</buttom>
-                        </div>
-                        <div class="ui error message"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!--工具条-->
-    <div id="leftToolBar">
-        <div id="toolbar" class="m-padded  m-fixed m-right-bottom">
-            <div class="ui vertical icon buttons">
-                <a href="#commend"   class="ui teal button">留言</a>
-                <div id="tocTop-button" class="ui icon button"><i class="chevron up icon"></i></div>
+        <!--工具条-->
+        <div id="leftToolBar">
+            <div id="toolbar" class="m-padded  m-fixed m-right-bottom">
+                <div class="ui vertical icon buttons">
+                    <a href="#commend"   class="ui teal button">留言</a>
+                    <div id="tocTop-button" class="ui icon button"><i class="chevron up icon"></i></div>
+                </div>
             </div>
+
         </div>
+        <br><br>
+        <!--底部footer-->
+        <footer id="footer">
+            <script>
+                $("#footer").load("template.html #footer");
+            </script>
+        </footer>
 
     </div>
-    <!--底部footer-->
-    <footer id="footer">
-        <script>
-            $("#footer").load("template.html #footer");
-        </script>
-    </footer>
+
 
 <script src="../static/lib/semantic-ui2.4.1/semantic.min.js"></script>
 <script src="../static/lib/highLights/highlight.pack.js"></script>
 <script src="../static/lib/tocbot/tocbot.min.js"></script>
 <script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
-
 <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
-
 <script src="../static/js/commonJS.js"></script>
 <script src="../static/js/pre/toHref.js"></script>
 <script src="../static/js/pre/blog_comment.js"></script>
-
-<script src="../static/lib/editormd/editormd.js"></script>
-
-<script type="text/javascript">
-    var markdown;
-    var blogId = sessionStorage.getItem("blogId");
-    $(function() {
-        InitArticle();
-
-        hljs.initHighlightingOnLoad();
-
-        $('.ui.sticky').sticky({
-                context: '#content'
-            });
-        initToc();
-
-
-        $('#payButton').popup({
-            popup: $('.payQR.popup'),
-            on:'click',
-            position:'bottom center'
-        });
-
-
-        $('.wechat').popup({
-            popup: $('.wechat-qr.popup'),
-            position:'left center'
-        });
-
-
-        //平滑滚动
-        $('#tocTop-button').click(function () {
-            $(window).scrollTo(0,500);
-        });
-
-        //滚动检测
-        var waypoint = new Waypoint({
-            element: document.getElementById('blogCenter'),
-            handler: function(direction) {
-                $("#waypoint_toc").show();
-                if (direction == 'down') {
-                    $('#toolbar').show(100);
-                } else{
-                    $('#toolbar').hide(100);
-                }
-            }
-        })
-
-
-        $('.ui.form').form({
-            fields : {
-                commend : {
-                    identifier: 'commend',
-                    rules: [{
-                        type : 'empty',
-                        prompt: '请输入内容',
-                    }]
-                },
-                nickname : {
-                    identifier: 'nickname',
-                    rules: [{
-                        type : 'empty',
-                        prompt: '请输入姓名',
-                    }]
-                },
-                email : {
-                    identifier: 'email',
-                    rules: [{
-                        type : 'email',
-                        prompt: '请输入邮箱格式',
-                    },{
-                        type : 'email',
-                        prompt: '邮箱不能为空',
-                    }]
-                },
-            },
-        });
-
-        $('#commentpost-btn').click(function () {
-            var boo = $('.ui.form').form('validate form');
-            if (boo) {
-                postComment();
-            } else {
-                console.log('校验失败');
-            }
-        });
-
-    });
-
-</script>
 <script src="../static/js/pre/header.js"></script>
-<script>
-    function getUserInfo(userId) {
-        var user = new Array();
-        $.ajax({
-            url: myhost + "/blog/user/" + userId,
-            type: "GET",
-            crossDomain: true,
-            contentType: "application/json",
-            dataType: "json",
-            async:false,
-            success: function (result) {
-                user[0] = result.data.id;
-                user[1] = result.data.nickname;
-                user[2] = result.data.avatar;
-            }
-        })
-        return user ;
-    }
-
-
-    function InitArticle() {
-        $.ajax({
-            url: myhost + "/blog/article/html/"+blogId,
-            type: "GET",
-            crossDomain: true,
-            contentType: "application/json",
-            dataType: "json",
-            async:false,
-            success: function (result) {
-
-                //获取用户信息
-                var user = getUserInfo(result.data.userId);
-
-                if(user[2] == null)
-                    $("#avater").src ="https://picsum.photos/id/1002/100/100";
-                else
-                    $("#avater").src = user[2];
-                $("#userName").append(user[1]);
-                $("#auth_master").append(user[1]);
-
-                $("#dates").append(result.data.createTime);
-                $("#auth_createtime").append(result.data.createTime);
-                $("#views").append(result.data.views);
-
-                document.title =   result.data.title;
-
-                $("#picture").attr("src",result.data.picture) ;
-
-                $("#views").src = "https://picsum.photos/id/1005/800/450";
-
-                if(result.data.copyRight){
-                    var div =  document.getElementById("copyRight");
-                    div.setAttribute("class","ui orange basic label");
-                    div.append("原创");
-                }else {
-                    var div =  document.getElementById("copyRight");
-                    div.setAttribute("class","ui red basic label");
-                    div.append("转载");
-                }
-                $("#title").append(result.data.title);
-                $("#content").append(result.data.content);
-
-                document.title =   result.data.title;
-
-                //标签
-                var tags = document.getElementById("tags");
-                $.each(result.data.tags,function (index,item) {
-                    $.ajax({
-                        url: myhost + "/blog/tag/" + item,
-                        dataType: "JSON",
-                        type: "GET",
-                        contentType: "application/json;charset-UTF-8",
-                        crossDomain: true,
-                        success: function (result) {
-                            var a = document.createElement("a");
-                            a.setAttribute("onclick","toTagHref("+result.data.id+")");
-                            a.setAttribute("class","ui teal basic  left pointing large label m-margin-tb-thiny");
-                            a.innerText= result.data.name;
-                            tags.append(a);
-                        }
-                    })
-                })
-
-                if(result.data.appreciation){
-                    $("#appreciate").show();
-                }
-
-                //开启评论
-                if(result.data.commentabled){
-                    $("#comment-container").show();
-                    InitCommends(result.data.id);
-                }
-
-
-            }
-        });
-    }
-
-
-    function postComment() {
-        var nickname = $("#nickname").val();
-        var email = $("#email").val();
-        var content = $("#commend").val();
-        $.ajax({
-            url: myhost + "/blog/comment",
-            dataType: "JSON",
-            type: "POST",
-            contentType: "application/json;charset-UTF-8",
-            crossDomain: true,
-            data:JSON.stringify({
-                "nickname":nickname,
-                "bolgId":blogId,
-                "email":email,
-                "content":content,
-                "parentCommentId":parentCommentId
-            }),
-            success: function (result) {
-                alert("评论成功");
-                $("#parnetName").empty();
-                parentCommentId = null;
-                $("#commentDiv").empty();
-                InitCommends(blogId);
-            }
-        })
-    }
-
-    //目录生成
-    function initToc() {
-        var id = 1;
-        $("#content").children("h1,h2,h3,h4,h5").each(function () {
-            // entry-content 为正文容器的 class，根据自己的情况修改
-            //var hyphenated = $(this).text().replace(/\s/g, '-');
-            // 如果你希望使用中文 id 的话就用上面这行，注意非ANSI编码文字会导致无法跳转
-            var hyphenated = "mashiro-" + id;
-            $(this).attr('id', hyphenated);
-            id++;
-        });
-
-        tocbot.init({
-            //构建目录的容器
-            tocSelector: '.js-toc',
-            // 文章容器.
-            contentSelector: '.js-toc-content',
-            // 需要解析的标题
-            headingSelector: 'h1,h2,h3',
-            positionFixedSelector: ".js-toc", //目录位置固定
-
-            scrollSmooth: true,
-            scrollSmoothOffset: -80,
-            headingsOffset: -500
-        });
-    }
-</script>
+<script src="../static/js/pre/blog-js.js"></script>
 </body>
 </html>
